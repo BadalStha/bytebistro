@@ -1,4 +1,4 @@
-package com.bytebistro.bytebistro;
+package com.bytebistro;
 
 import java.io.*;
 
