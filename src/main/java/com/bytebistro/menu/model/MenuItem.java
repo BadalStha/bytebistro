@@ -17,6 +17,8 @@ public class MenuItem {
         this.isAvailable = isAvailable;
     }
 
+    public MenuItem() {}
+
     public int getItemId() {
         return itemId;
     }
