@@ -265,13 +265,6 @@
         </div>
         <% } %>
 
-        <%-- Success from registration or logout --%>
-        <% if (request.getAttribute("success") != null) { %>
-        <div class="alert alert-success">
-            <%= request.getAttribute("success") %>
-        </div>
-        <% } %>
-
         <%-- Success from URL parameter --%>
         <% if (request.getParameter("success") != null) { %>
         <div class="alert alert-success">
