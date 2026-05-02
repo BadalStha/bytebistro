@@ -100,3 +100,11 @@ create table ratings(
     rated_at timestamp default current_timestamp,
     foreign key (user_id) references users(user_id)
 );
+
+create table menu_item_images(
+    image_id int primary key auto_increment,
+    item_id int not null,
+    image_path varchar(255) not null,
+    uploaded_at timestamp default current_timestamp,
+    foreign key (item_id) references menu_items(item_id) on delete cascade
+);
