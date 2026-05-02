@@ -41,7 +41,7 @@ public class RegisterServlet extends HttpServlet {
         String phone    = request.getParameter("phone");
         String password = request.getParameter("password");
         String confirmPassword = request.getParameter("confirmPassword");
-        String role     = request.getParameter("role");
+        String role = "member";
 
         // ── Validation ──────────────────────────────────────────────
 
@@ -113,14 +113,6 @@ public class RegisterServlet extends HttpServlet {
             request.setAttribute("email", email);
             request.setAttribute("phone", phone);
             request.setAttribute("role", role);
-            request.getRequestDispatcher("/pages/common/register.jsp")
-                    .forward(request, response);
-            return;
-        }
-
-        // Role must be member or visitor only
-        if (!role.equals("member") && !role.equals("visitor")) {
-            request.setAttribute("error", "Invalid role selected.");
             request.getRequestDispatcher("/pages/common/register.jsp")
                     .forward(request, response);
             return;
