@@ -111,7 +111,7 @@
             color: #8B0000;
         }
 
-        /* REPLACE with this */
+        /* ── Input Wrapper ── */
         .input-wrapper {
             display: flex;
             align-items: center;
@@ -132,7 +132,6 @@
             color: #aaa;
         }
 
-        /* REPLACE with this */
         .input-wrapper input {
             flex: 1;
             border: none;
@@ -262,6 +261,13 @@
         <% if (request.getParameter("error") != null) { %>
         <div class="alert alert-error">
             <%= request.getParameter("error") %>
+        </div>
+        <% } %>
+
+        <%-- Success from registration or logout --%>
+        <% if (request.getAttribute("success") != null) { %>
+        <div class="alert alert-success">
+            <%= request.getAttribute("success") %>
         </div>
         <% } %>
 
