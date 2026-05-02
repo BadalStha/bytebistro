@@ -39,7 +39,7 @@ public class EditMenuItemServlet extends HttpServlet {
                 req.setAttribute("error", "Unable to update item");
             }
         } catch (Exception e) {
-            req.setAttribute("error", "Something went wront: " + e.getMessage());
+            req.setAttribute("error", "Something went wrong: " + e.getMessage());
         }
         req.getRequestDispatcher("pages/admin/menu-form.jsp").forward(req, resp);
     }
