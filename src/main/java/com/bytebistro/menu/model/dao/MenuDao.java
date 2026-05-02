@@ -146,6 +146,59 @@ public class MenuDao {
             return items;
         }
     }
+    // Method to get all available menu items
+    public List<MenuItem> getAvailableMenuItems() {
+        List<MenuItem> menuItems = new ArrayList<>();
+        String sql = "SELECT * FROM menu_items WHERE is_available = true ORDER BY item_type ASC";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                MenuItem item = new MenuItem();
+                item.setItemId(rs.getInt("item_id"));
+                item.setName(rs.getString("name"));
+                item.setDescription(rs.getString("description"));
+                item.setPrice(rs.getDouble("price"));
+                item.setItemType(rs.getString("item_type"));
+                item.setAvailable(rs.getBoolean("is_available"));
+                menuItems.add(item);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error fetching menu items: " + e.getMessage());
+        }
+        return menuItems;
+    }
+
+    // Method to get single menu item by ID
+    public MenuItem getMenuItemById(int itemId) {
+        String sql = "SELECT * FROM menu_items WHERE item_id = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, itemId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                MenuItem item = new MenuItem();
+                item.setItemId(rs.getInt("item_id"));
+                item.setName(rs.getString("name"));
+                item.setDescription(rs.getString("description"));
+                item.setPrice(rs.getDouble("price"));
+                item.setItemType(rs.getString("item_type"));
+                item.setAvailable(rs.getBoolean("is_available"));
+                return item;
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error fetching menu item: " + e.getMessage());
+        }
+        return null;
+    }
 }
 
 

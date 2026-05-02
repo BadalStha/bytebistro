@@ -13,13 +13,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-@WebFilter(urlPatterns = {
-        "/pages/admin/*",
-        "/menu",
-        "/report",
-        "/promotion",
-        "/bill"
-})
+
 public class AdminFilter implements Filter {
 
     @Override
