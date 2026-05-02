@@ -25,9 +25,9 @@ public class MenuServlet extends HttpServlet {
             } catch (Exception e) {
                 req.setAttribute("error", "Unable to fetch menu items: " + e.getMessage());
             }
-            req.getRequestDispatcher("pages/admin/menu-list.jsp").forward(req, resp);
+            req.getRequestDispatcher("/pages/admin/menu-list.jsp").forward(req, resp);
         } else if ("add".equals(action)) {
-            req.getRequestDispatcher("pages/admin/menu-form.jsp").forward(req, resp);
+            req.getRequestDispatcher("/pages/admin/menu-form.jsp").forward(req, resp);
         } else if ("edit". equals(action)) {
             try {
                 int id = Integer.parseInt(req.getParameter("id"));
@@ -36,7 +36,7 @@ public class MenuServlet extends HttpServlet {
             } catch (Exception e) {
                 req.setAttribute("error", "Unable to fetch menu item: " + e.getMessage());
             }
-            req.getRequestDispatcher("pages/admin/menu-form.jsp").forward(req, resp);
+            req.getRequestDispatcher("/pages/admin/menu-form.jsp").forward(req, resp);
         } else if ("delete".equals(action)) {
             try {
                 int id = Integer.parseInt(req.getParameter("id"));
@@ -59,7 +59,7 @@ public class MenuServlet extends HttpServlet {
             } catch (Exception e) {
                 req.setAttribute("error", "Search failed: " + e.getMessage());
             }
-            req.getRequestDispatcher("pages/admin/menu-list.jsp").forward(req, resp);
+            req.getRequestDispatcher("/pages/admin/menu-list.jsp").forward(req, resp);
         } else {
             try {
                 List<MenuItem> menuList = MenuDao.fetchMenuItems();
@@ -67,7 +67,7 @@ public class MenuServlet extends HttpServlet {
             } catch (Exception e) {
                 req.setAttribute("error", "Unable to fetch menu items: " + e.getMessage());
             }
-            req.getRequestDispatcher("pages/admin/menu-list.jsp").forward(req, resp);
+            req.getRequestDispatcher("/pages/admin/menu-list.jsp").forward(req, resp);
         }
     }
 
