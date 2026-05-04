@@ -262,6 +262,19 @@
         <p class="subtitle">Access your culinary dashboard</p>
 
         <%-- Error from servlet --%>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/form.css">
+</head>
+<body>
+
+<div class="login-card">
+    <div class="card-body">
+
+        <!-- Header -->
+        <h2>Welcome Back</h2>
+        <p class="subtitle">Access your culinary dashboard</p>
+
+        <%-- Error from servlet --%>
         <% if (request.getAttribute("error") != null) { %>
         <div class="alert alert-error">
             <%= request.getAttribute("error") %>
@@ -284,6 +297,7 @@
 
         <form action="${pageContext.request.contextPath}/login"
               method="post" novalidate>
+        <form action="${pageContext.request.contextPath}/login" method="post" novalidate>
 
             <%-- Email --%>
             <div class="form-group">
@@ -299,6 +313,14 @@
                             required
                     />
                 </div>
+                <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Enter your email"
+                        value="<%= request.getAttribute("email") != null ? request.getAttribute("email") : "" %>"
+                        required
+                />
             </div>
 
             <%-- Password --%>
@@ -309,10 +331,18 @@
                 </div>
                 <div class="input-wrapper">
                     <span class="input-icon">&#128274;</span>
+                <label for="password">Password</label>
+                <div class="input-wrapper">
+                    <span class="input-icon">&#128274;</span>
                     <input
                             type="password"
                             id="password"
                             name="password"
+                            required
+                    />
+                    <span class="toggle-password"
+                          onclick="togglePassword('password')">&#128065;</span>
+                            placeholder="Enter your password"
                             required
                     />
                     <span class="toggle-password"
@@ -324,6 +354,31 @@
             <button type="submit" class="btn-login">
                 Sign In To Portal
             </button>
+
+            <%-- Register Link --%>
+            <div class="form-footer-link">
+                New to the kitchen?
+                <a href="${pageContext.request.contextPath}/register">
+                    Create an account
+                </a>
+            </div>
+
+        </form>
+
+        <!-- Security Badges -->
+        <div class="security-badges">
+            <span class="badge">&#9679; Secure Access</span>
+            <span class="badge-dot"></span>
+            <span class="badge">&#128274; 256-Bit Encrypted</span>
+        </div>
+
+    </div>
+</div>
+
+<script>
+            <div class="form-group">
+                <button type="submit" class="btn-primary">Login</button>
+            </div>
 
             <%-- Register Link --%>
             <div class="form-footer-link">

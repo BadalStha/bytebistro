@@ -13,15 +13,6 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-@WebFilter(urlPatterns = {
-        "/pages/member/*",
-        "/order",
-        "/booking",
-        "/payment",
-        "/beverage",
-        "/rating",
-        "/profile"
-})
 public class AuthenticationFilter implements Filter {
 
     @Override
