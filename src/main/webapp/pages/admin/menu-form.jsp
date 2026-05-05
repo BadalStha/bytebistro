@@ -1,4 +1,5 @@
 <%@ page import="com.bytebistro.menu.model.MenuItem" %>
+<%@ page import="com.bytebistro.image.model.Image" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <jsp:include page="/components/admin-header.jsp"/>
@@ -26,7 +27,6 @@
     .toggle.off { background: #ddd; }
     .toggle-dot { width: 24px; height: 24px; background: white; border-radius: 50%; position: absolute; top: 2px; left: 2px; transition: 0.3s; }
     .toggle.on .toggle-dot { left: 24px; }
-    .toggle-input { display: none; }
 
     .button-group { display: flex; gap: 12px; margin-top: 32px; }
     .btn { padding: 12px 28px; border: none; border-radius: 4px; font-size: 12px; letter-spacing: 1px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; }
@@ -37,12 +37,10 @@
 
     .form-sidebar { background: white; padding: 32px 24px; border-radius: 8px; }
     .sidebar-title { font-size: 14px; color: #8b0000; margin-bottom: 16px; font-weight: bold; letter-spacing: 1px; }
-    .photo-upload { background: #3d3d3a; color: white; padding: 40px 20px; text-align: center; border-radius: 4px; margin-bottom: 20px; cursor: pointer; }
+    .photo-upload { background: #3d3d3a; color: white; padding: 40px 20px; text-align: center; border-radius: 4px; margin-bottom: 20px; cursor: pointer; position: relative; }
     .photo-upload p { font-size: 11px; letter-spacing: 1px; }
-    .tip { background: #fafaf0; padding: 16px; border-radius: 4px; }
-    .tip-title { font-size: 12px; color: #8b0000; font-weight: bold; margin-bottom: 8px; }
-    .tip-text { font-size: 12px; color: #666; line-height: 1.6; }
-    .tip-badge { display: inline-block; background: #f0f0c8; color: #5a5a00; padding: 4px 8px; border-radius: 4px; font-size: 10px; margin-top: 8px; }
+    .photo-upload input { position: absolute; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
+    .image-preview { max-width: 100%; border-radius: 4px; margin-bottom: 16px; }
 
     .alert { padding: 10px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 13px; }
     .alert-error { background: #f8d7da; color: #721c24; }
@@ -61,13 +59,14 @@
 
         <%
             MenuItem menuItem = (MenuItem) request.getAttribute("menuItem");
+            Image image = (Image) request.getAttribute("image");
             boolean isEdit = menuItem != null;
         %>
 
         <div class="form-title"><%= isEdit ? "Edit Menu Item" : "Add Menu Item" %></div>
         <div class="form-subtitle">Curate the culinary experience with precision.</div>
 
-        <form method="post" action="<%= isEdit ? request.getContextPath() + "/admin/edit-menu-item" : request.getContextPath() + "/admin/menu" %>">
+        <form method="post" action="<%= isEdit ? request.getContextPath() + "/admin/edit-menu-item" : request.getContextPath() + "/admin/menu" %>" enctype="multipart/form-data">
 
             <% if (isEdit) { %>
             <input type="hidden" name="itemId" value="<%= menuItem.getItemId() %>">
@@ -88,7 +87,7 @@
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
                 <div class="form-group">
-                    <label>Price ($)</label>
+                    <label>Price (NPR)</label>
                     <input type="number" step="0.01" name="price" value="<%= isEdit ? menuItem.getPrice() : "0.00" %>" required>
                 </div>
                 <div class="form-group">
@@ -125,18 +124,16 @@
 
     <div class="form-sidebar">
         <div class="sidebar-title">Item Photo</div>
-        <div class="photo-upload">
+        <div class="photo-upload" onclick="document.getElementById('itemImage').click();">
             <p>UPLOAD ITEM PHOTO</p>
+            <input type="file" id="itemImage" name="itemImage" accept="image/*" onchange="previewImage(this)">
         </div>
 
-        <div class="tip">
-            <div class="tip-title">Editorial Tip</div>
-            <div class="tip-text">
-                A great description doesn't just list ingredients; it tells a story of origin and craft.
-                Mention seasonal sourcing or specialized techniques.
-            </div>
-            <div class="tip-badge">MAINTAIN PREMIUM STANDARDS</div>
-        </div>
+        <% if (isEdit && image != null) { %>
+        <img src="<%= request.getContextPath() %>/<%= image.getImagePath() %>" alt="<%= menuItem.getName() %>" class="image-preview">
+        <% } %>
+
+        <img id="imagePreviewTag" style="max-width: 100%; border-radius: 4px; display: none;" alt="Preview">
     </div>
 </div>
 
@@ -148,6 +145,18 @@
         input.value = element.classList.contains('on') ? 'true' : 'false';
         const label = element.nextElementSibling.nextElementSibling;
         label.textContent = element.classList.contains('on') ? 'Available' : 'Unavailable';
+    }
+
+    function previewImage(input) {
+        const preview = document.getElementById('imagePreviewTag');
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
     }
 </script>
 
