@@ -1,21 +1,30 @@
 package com.bytebistro.menu.controller;
 
+import com.bytebistro.image.model.Image;
+import com.bytebistro.image.model.dao.ImageDao;
 import com.bytebistro.menu.model.MenuItem;
 import com.bytebistro.menu.model.dao.MenuDao;
+import com.bytebistro.utils.ImageUtils;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
 
 import java.io.IOException;
 import java.util.List;
 
 @WebServlet("/admin/menu")
+@MultipartConfig
 public class MenuServlet extends HttpServlet {
 
+
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+
         String action = req.getParameter("page");
 
         if ("list".equals(action)) {
@@ -26,9 +35,11 @@ public class MenuServlet extends HttpServlet {
                 req.setAttribute("error", "Unable to fetch menu items: " + e.getMessage());
             }
             req.getRequestDispatcher("/pages/admin/menu-list.jsp").forward(req, resp);
+
         } else if ("add".equals(action)) {
             req.getRequestDispatcher("/pages/admin/menu-form.jsp").forward(req, resp);
-        } else if ("edit". equals(action)) {
+
+        } else if ("edit".equals(action)) {
             try {
                 int id = Integer.parseInt(req.getParameter("id"));
                 MenuItem menuItem = MenuDao.fetchMenuItemById(id);
@@ -37,6 +48,7 @@ public class MenuServlet extends HttpServlet {
                 req.setAttribute("error", "Unable to fetch menu item: " + e.getMessage());
             }
             req.getRequestDispatcher("/pages/admin/menu-form.jsp").forward(req, resp);
+
         } else if ("delete".equals(action)) {
             try {
                 int id = Integer.parseInt(req.getParameter("id"));
@@ -50,6 +62,7 @@ public class MenuServlet extends HttpServlet {
             } catch (Exception e) {
                 req.setAttribute("error", "Something went wrong: " + e.getMessage());
             }
+
         } else if ("search".equals(action)) {
             String keyword = req.getParameter("keyword");
             try {
@@ -60,6 +73,7 @@ public class MenuServlet extends HttpServlet {
                 req.setAttribute("error", "Search failed: " + e.getMessage());
             }
             req.getRequestDispatcher("/pages/admin/menu-list.jsp").forward(req, resp);
+
         } else {
             try {
                 List<MenuItem> menuList = MenuDao.fetchMenuItems();
@@ -72,7 +86,8 @@ public class MenuServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
 
         String action = req.getParameter("action");
 
@@ -82,6 +97,7 @@ public class MenuServlet extends HttpServlet {
             double price = Double.parseDouble(req.getParameter("price"));
             String itemType = req.getParameter("itemType");
             boolean isAvailable = "true".equals(req.getParameter("isAvailable"));
+            Part imagePart = req.getPart("itemImage");
 
             MenuItem item = new MenuItem();
             item.setName(name);
@@ -91,17 +107,24 @@ public class MenuServlet extends HttpServlet {
             item.setAvailable(isAvailable);
 
             try {
-                boolean result = MenuDao.insertMenuItem(item);
-                if(result) {
+                int newItemId = MenuDao.insertMenuItem(item);
+                if (newItemId > 0) {
+                    // Save image if uploaded
+                    if (imagePart != null && imagePart.getSize() > 0) {
+                        String imagePath = ImageUtils.saveImageInDirectory(imagePart);
+                        boolean imageResult = ImageDao.insertImageDetails(String.valueOf(newItemId), imagePath);
+                    }
+
                     resp.sendRedirect("/admin/menu?page=list");
                     return;
                 } else {
                     req.setAttribute("error", "Failed to add item");
                 }
-            } catch (Exception e){
+            } catch (Exception e) {
                 req.setAttribute("error", e.getMessage());
             }
-            req.getRequestDispatcher("pages/admin/menu-form.jsp").forward(req, resp);
+            req.getRequestDispatcher("/pages/admin/menu-form.jsp").forward(req, resp);
         }
     }
+
 }
