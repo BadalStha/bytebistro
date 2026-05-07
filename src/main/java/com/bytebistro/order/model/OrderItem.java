@@ -7,9 +7,15 @@ public class OrderItem {
     private int quantity;
     private double unitPrice;
 
+    // For displaying item name from menu_items table
+    private String itemName;
+
+    // Default constructor
     public OrderItem() {}
 
-    public OrderItem(int orderItemId, int orderId, int itemId, int quantity, double unitPrice) {
+    // Parameterized constructor
+    public OrderItem(int orderItemId, int orderId, int itemId,
+                     int quantity, double unitPrice) {
         this.orderItemId = orderItemId;
         this.orderId = orderId;
         this.itemId = itemId;

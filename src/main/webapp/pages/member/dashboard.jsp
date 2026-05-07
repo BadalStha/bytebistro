@@ -1,16 +1,13 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: badal
-  Date: 4/9/26
-  Time: 11:08 AM
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page language="java" pageEncoding="UTF-8" %>
+<!DOCTYPE html>
 <html>
-<head>
-    <title>Title</title>
-</head>
+<head><title>Member Dashboard</title></head>
 <body>
-
+<h2>Welcome, <%= session.getAttribute("fullName") %></h2>
+<a href="${pageContext.request.contextPath}/order">Place Order</a> |
+<a href="${pageContext.request.contextPath}/order?action=history">Order History</a> |
+<a href="${pageContext.request.contextPath}/booking">Book Table</a> |
+<a href="${pageContext.request.contextPath}/rating">Rate Us</a> |
+<a href="${pageContext.request.contextPath}/logout">Logout</a>
 </body>
 </html>

@@ -1,15 +1,23 @@
 package com.bytebistro.order.model;
 
+import java.sql.Timestamp;
+import java.util.List;
+
 public class Order {
     private int orderId;
     private int userId;
     private String deliveryAddress;
     private String status;
-    private String orderedAt;
+    private Timestamp orderedAt;
+    private List<OrderItem> orderItems;
+    private double totalAmount;
 
+    // Default constructor
     public Order() {}
 
-    public Order(int orderId, int userId, String deliveryAddress, String status, String orderedAt) {
+    // Parameterized constructor
+    public Order(int orderId, int userId, String deliveryAddress,
+                 String status, Timestamp orderedAt) {
         this.orderId = orderId;
         this.userId = userId;
         this.deliveryAddress = deliveryAddress;

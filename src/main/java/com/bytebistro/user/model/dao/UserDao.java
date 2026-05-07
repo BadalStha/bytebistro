@@ -162,4 +162,21 @@ public class UserDao {
             return false;
         }
     }
+    // Method to check if phone exists for another user
+// (used during profile update to allow same phone for same user)
+    public boolean isPhoneExistsForOtherUser(String phone, int userId) {
+        String sql = "SELECT user_id FROM users WHERE phone = ? AND user_id != ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, phone);
+            ps.setInt(2, userId);
+            ResultSet rs = ps.executeQuery();
+            return rs.next();
+
+        } catch (Exception e) {
+            System.out.println("Error checking phone: " + e.getMessage());
+            return false;
+        }
+    }
 }

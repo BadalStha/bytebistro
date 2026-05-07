@@ -51,7 +51,6 @@ public class LoginServlet extends HttpServlet {
         String email    = req.getParameter("email");
         String password = req.getParameter("password");
 
-        // Check empty fields
         if (email == null || email.trim().isEmpty() ||
                 password == null || password.trim().isEmpty()) {
             req.setAttribute("error", "Email and password are required.");
