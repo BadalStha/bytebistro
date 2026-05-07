@@ -3,106 +3,96 @@ package com.bytebistro.order.model.dao;
 import com.bytebistro.order.model.Order;
 import com.bytebistro.utils.DBConnection;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class OrderDao {
-
-    // Method to place a new order
-    public int placeOrder(Order order) {
-        String sql = "INSERT INTO orders (user_id, delivery_address, status) " +
-                "VALUES (?, ?, 'pending')";
+    public static List<Order> fetchOrders() throws SQLException {
+        String query = "SELECT * FROM orders";
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement st = conn.prepareStatement(query)) {
 
-            ps.setInt(1, order.getUserId());
-            ps.setString(2, order.getDeliveryAddress());
-
-            ps.executeUpdate();
-
-            // Get the generated order ID
-            ResultSet rs = ps.getGeneratedKeys();
-            if (rs.next()) {
-                return rs.getInt(1);
-            }
-
-        } catch (Exception e) {
-            System.out.println("Error placing order: " + e.getMessage());
-        }
-        return -1; // Return -1 if order placement failed
-    }
-
-    // Method to get all orders by user ID
-    public List<Order> getOrdersByUserId(int userId) {
-        List<Order> orders = new ArrayList<>();
-        String sql = "SELECT * FROM orders WHERE user_id = ? ORDER BY ordered_at DESC";
-
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setInt(1, userId);
-            ResultSet rs = ps.executeQuery();
+            ResultSet rs = st.executeQuery();
+            List<Order> orderList = new ArrayList<>();
 
             while (rs.next()) {
-                Order order = new Order();
-                order.setOrderId(rs.getInt("order_id"));
-                order.setUserId(rs.getInt("user_id"));
-                order.setDeliveryAddress(rs.getString("delivery_address"));
-                order.setStatus(rs.getString("status"));
-                order.setOrderedAt(rs.getTimestamp("ordered_at"));
-                orders.add(order);
-            }
+                int orderId = rs.getInt("order_id");
+                int userId = rs.getInt("user_id");
+                String deliveryAddress = rs.getString("delivery_address");
+                String status = rs.getString("status");
+                String orderedAt = rs.getString("ordered_at");
 
-        } catch (Exception e) {
-            System.out.println("Error fetching orders: " + e.getMessage());
+                Order o = new Order(orderId, userId, deliveryAddress, status, orderedAt);
+                orderList.add(o);
+            }
+            return orderList;
         }
-        return orders;
     }
 
-    // Method to get single order by order ID
-    public Order getOrderById(int orderId) {
-        String sql = "SELECT * FROM orders WHERE order_id = ?";
-
+    public static Order fetchOrderById(int id) throws SQLException {
+        String query = "SELECT * FROM orders WHERE order_id = ?";
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setInt(1, orderId);
-            ResultSet rs = ps.executeQuery();
-
+             PreparedStatement st = conn.prepareStatement(query)) {
+            st.setInt(1, id);
+            ResultSet rs = st.executeQuery();
             if (rs.next()) {
-                Order order = new Order();
-                order.setOrderId(rs.getInt("order_id"));
-                order.setUserId(rs.getInt("user_id"));
-                order.setDeliveryAddress(rs.getString("delivery_address"));
-                order.setStatus(rs.getString("status"));
-                order.setOrderedAt(rs.getTimestamp("ordered_at"));
-                return order;
+                int userId = rs.getInt("user_id");
+                String deliveryAddress = rs.getString("delivery_address");
+                String status = rs.getString("status");
+                String orderedAt = rs.getString("ordered_at");
+                return new Order(id, userId, deliveryAddress, status, orderedAt);
             }
-
-        } catch (Exception e) {
-            System.out.println("Error fetching order: " + e.getMessage());
+            return null;
         }
-        return null;
     }
 
-    // Method to cancel an order
-    public boolean cancelOrder(int orderId, int userId) {
-        String sql = "UPDATE orders SET status = 'cancelled' " +
-                "WHERE order_id = ? AND user_id = ? AND status = 'pending'";
-
+    public static List<Order> fetchOrdersByDate(String date) throws SQLException {
+        String query = "SELECT * FROM orders WHERE DATE(ordered_at) = ?";
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+             PreparedStatement st = conn.prepareStatement(query)) {
+            st.setString(1, date);
 
-            ps.setInt(1, orderId);
-            ps.setInt(2, userId);
+            ResultSet rs = st.executeQuery();
+            List<Order> orderList = new ArrayList<>();
 
-            int rowsAffected = ps.executeUpdate();
-            return rowsAffected > 0;
+            while (rs.next()) {
+                int orderId = rs.getInt("order_id");
+                int userId = rs.getInt("user_id");
+                String deliveryAddress = rs.getString("delivery_address");
+                String status = rs.getString("status");
+                String orderedAt = rs.getString("ordered_at");
 
-        } catch (Exception e) {
-            System.out.println("Error cancelling order: " + e.getMessage());
+                Order o = new Order(orderId, userId, deliveryAddress, status, orderedAt);
+                orderList.add(o);
+            }
+            return orderList;
         }
-        return false;
     }
+
+    public static List<Order> fetchOrdersByUser(int userId) throws SQLException {
+        String query = "SELECT * FROM orders WHERE user_id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(query)) {
+            st.setInt(1, userId);
+
+            ResultSet rs = st.executeQuery();
+            List<Order> orderList = new ArrayList<>();
+
+            while (rs.next()) {
+                int orderId = rs.getInt("order_id");
+                String deliveryAddress = rs.getString("delivery_address");
+                String status = rs.getString("status");
+                String orderedAt = rs.getString("ordered_at");
+
+                Order o = new Order(orderId, userId, deliveryAddress, status, orderedAt);
+                orderList.add(o);
+            }
+            return orderList;
+        }
+    }
+
 }

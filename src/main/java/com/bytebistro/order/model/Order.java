@@ -4,7 +4,6 @@ import java.sql.Timestamp;
 import java.util.List;
 
 public class Order {
-
     private int orderId;
     private int userId;
     private String deliveryAddress;
@@ -26,21 +25,43 @@ public class Order {
         this.orderedAt = orderedAt;
     }
 
-    // Getters
-    public int getOrderId() { return orderId; }
-    public int getUserId() { return userId; }
-    public String getDeliveryAddress() { return deliveryAddress; }
-    public String getStatus() { return status; }
-    public Timestamp getOrderedAt() { return orderedAt; }
-    public List<OrderItem> getOrderItems() { return orderItems; }
-    public double getTotalAmount() { return totalAmount; }
+    public int getOrderId() {
+        return orderId;
+    }
 
-    // Setters
-    public void setOrderId(int orderId) { this.orderId = orderId; }
-    public void setUserId(int userId) { this.userId = userId; }
-    public void setDeliveryAddress(String deliveryAddress) { this.deliveryAddress = deliveryAddress; }
-    public void setStatus(String status) { this.status = status; }
-    public void setOrderedAt(Timestamp orderedAt) { this.orderedAt = orderedAt; }
-    public void setOrderItems(List<OrderItem> orderItems) { this.orderItems = orderItems; }
-    public void setTotalAmount(double totalAmount) { this.totalAmount = totalAmount; }
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public String getDeliveryAddress() {
+        return deliveryAddress;
+    }
+
+    public void setDeliveryAddress(String deliveryAddress) {
+        this.deliveryAddress = deliveryAddress;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getOrderedAt() {
+        return orderedAt;
+    }
+
+    public void setOrderedAt(String orderedAt) {
+        this.orderedAt = orderedAt;
+    }
 }
