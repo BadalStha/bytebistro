@@ -24,10 +24,8 @@ public class BookingDao {
             ps.setDate(3, booking.getBookingDate());
             ps.setTime(4, booking.getBookingTime());
             ps.setInt(5, booking.getGuestCount());
-
             ps.executeUpdate();
 
-            // Get generated booking ID
             ResultSet rs = ps.getGeneratedKeys();
             if (rs.next()) {
                 return rs.getInt(1);
@@ -75,7 +73,7 @@ public class BookingDao {
         return bookings;
     }
 
-    // Method to get single booking by booking ID
+    // Method to get single booking by ID
     public Booking getBookingById(int bookingId) {
         String sql = "SELECT b.*, t.table_number, t.seating_capacity " +
                 "FROM bookings b " +
@@ -109,15 +107,12 @@ public class BookingDao {
         return null;
     }
 
-    // Method to check if table is already booked
-    // for a given date and time
+    // Method to check if table is available
     public boolean isTableAvailable(int tableId, String bookingDate,
                                     String bookingTime) {
         String sql = "SELECT booking_id FROM bookings " +
-                "WHERE table_id = ? " +
-                "AND booking_date = ? " +
-                "AND booking_time = ? " +
-                "AND status != 'cancelled'";
+                "WHERE table_id = ? AND booking_date = ? " +
+                "AND booking_time = ? AND status != 'cancelled'";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -125,19 +120,19 @@ public class BookingDao {
             ps.setInt(1, tableId);
             ps.setString(2, bookingDate);
             ps.setString(3, bookingTime);
-
             ResultSet rs = ps.executeQuery();
-            return !rs.next(); // True if no existing booking found
+            return !rs.next();
 
         } catch (Exception e) {
-            System.out.println("Error checking availability: " + e.getMessage());
+            System.out.println("Error checking availability: " +
+                    e.getMessage());
         }
         return false;
     }
 
-    // Method to cancel a booking
+    // Method to cancel a booking with
+    // cancellation fee calculation
     public boolean cancelBooking(int bookingId, int userId) {
-        // Calculate cancellation fee based on booking date
         String checkSql = "SELECT booking_date FROM bookings " +
                 "WHERE booking_id = ? AND user_id = ? " +
                 "AND status = 'pending'";
@@ -152,36 +147,53 @@ public class BookingDao {
             if (rs.next()) {
                 Date bookingDate = rs.getDate("booking_date");
                 Date today = new Date(System.currentTimeMillis());
-
-                // Calculate days difference
                 long diff = bookingDate.getTime() - today.getTime();
                 long daysDiff = diff / (1000 * 60 * 60 * 24);
 
-                // Set cancellation fee based on days remaining
+                // Calculate cancellation fee
                 double cancellationFee = 0.00;
                 if (daysDiff <= 1) {
-                    cancellationFee = 500.00; // Fee if cancelled within 1 day
+                    cancellationFee = 500.00;
                 } else if (daysDiff <= 3) {
-                    cancellationFee = 250.00; // Fee if cancelled within 3 days
+                    cancellationFee = 250.00;
                 }
 
-                // Update booking status and cancellation fee
-                String updateSql = "UPDATE bookings SET status = 'cancelled', " +
-                        "cancellation_fee = ? " +
+                String updateSql = "UPDATE bookings SET status = 'cancelled'," +
+                        " cancellation_fee = ? " +
                         "WHERE booking_id = ? AND user_id = ?";
 
-                PreparedStatement updatePs = conn.prepareStatement(updateSql);
+                PreparedStatement updatePs =
+                        conn.prepareStatement(updateSql);
                 updatePs.setDouble(1, cancellationFee);
                 updatePs.setInt(2, bookingId);
                 updatePs.setInt(3, userId);
 
-                int rowsAffected = updatePs.executeUpdate();
-                return rowsAffected > 0;
+                return updatePs.executeUpdate() > 0;
             }
 
         } catch (Exception e) {
             System.out.println("Error cancelling booking: " + e.getMessage());
         }
         return false;
+    }
+
+    // Method to get total bookings count
+    // for a user
+    public int getTotalBookingsByUserId(int userId) {
+        String sql = "SELECT COUNT(*) FROM bookings WHERE user_id = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error counting bookings: " + e.getMessage());
+        }
+        return 0;
     }
 }
