@@ -2,6 +2,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.bytebistro.booking.model.Booking" %>
 <%@ page import="com.bytebistro.booking.model.TableInfo" %>
+<%@ page import="com.bytebistro.menu.model.MenuItem" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -463,6 +464,56 @@
             font-size: 48px;
         }
 
+        /* ── Beverage Card ── */
+        .beverage-card {
+            background: #fff;
+            border-radius: 8px;
+            padding: 24px;
+        }
+
+        .beverage-card h3 {
+            font-family: 'Georgia', serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+        }
+
+        .beverage-field {
+            margin-bottom: 16px;
+        }
+
+        .beverage-field label {
+            display: block;
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #888;
+            margin-bottom: 8px;
+        }
+
+        .beverage-field select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #eee;
+            border-radius: 4px;
+            font-size: 13px;
+            color: #333;
+            background: #fafafa;
+            outline: none;
+            cursor: pointer;
+            transition: border-color 0.2s;
+            font-family: 'Arial', sans-serif;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+        }
+
+        .beverage-field select:focus {
+            border-color: #8B0000;
+        }
+
         /* ── Summary Card ── */
         .summary-card {
             background: #3a1a1a;
@@ -602,6 +653,8 @@
             (List<Booking>) request.getAttribute("bookings");
     List<TableInfo> tables =
             (List<TableInfo>) request.getAttribute("tables");
+    List<MenuItem> beverages =
+            (List<MenuItem>) request.getAttribute("beverages");
     Integer totalBookings =
             (Integer) request.getAttribute("totalBookings");
     if (totalBookings == null) totalBookings = 0;
@@ -621,7 +674,8 @@
                 Menu</a>
         </li>
         <li>
-            <a href="${pageContext.request.contextPath}/order">Orders</a>
+            <a href="${pageContext.request.contextPath}/order">
+                Orders</a>
         </li>
     </ul>
     <div class="navbar-right">
@@ -702,7 +756,6 @@
                     Floor Map: Main Dining Room
                 </span>
             </div>
-
             <div class="tables-grid" id="tablesGrid">
                 <%
                     if (tables != null && !tables.isEmpty()) {
@@ -743,10 +796,7 @@
 
         <!-- My Bookings -->
         <div class="bookings-section">
-            <h3>My Bookings
-                (<%= totalBookings %>)
-            </h3>
-
+            <h3>My Bookings (<%= totalBookings %>)</h3>
             <% if (bookings != null && !bookings.isEmpty()) {
                 for (Booking b : bookings) { %>
             <div class="booking-card">
@@ -754,7 +804,8 @@
                         <span class="booking-id">
                             #BB-<%= b.getBookingId() %>
                         </span>
-                    <span class="status-badge status-<%= b.getStatus() %>">
+                    <span class="status-badge
+                              status-<%= b.getStatus() %>">
                             <%= b.getStatus().toUpperCase() %>
                         </span>
                 </div>
@@ -779,24 +830,23 @@
                 </div>
                 <% if ("pending".equals(b.getStatus())) { %>
                 <div class="booking-card-footer">
-                    <% if (b.getCancellationFee() > 0) { %>
-                    <span class="cancellation-fee">
+                            <span class="cancellation-fee">
+                                <% if (b.getCancellationFee() > 0) { %>
                                     Cancellation Fee: Rs.
                                     <%= String.format("%.2f",
                                             b.getCancellationFee()) %>
-                                </span>
-                    <% } else { %>
-                    <span class="cancellation-fee">
+                                <% } else { %>
                                     Free Cancellation
-                                </span>
-                    <% } %>
+                                <% } %>
+                            </span>
                     <form action="${pageContext.request.contextPath}/booking"
                           method="post">
                         <input type="hidden" name="action"
                                value="cancel"/>
                         <input type="hidden" name="bookingId"
                                value="<%= b.getBookingId() %>"/>
-                        <button type="submit" class="btn-cancel"
+                        <button type="submit"
+                                class="btn-cancel"
                                 onclick="return confirm(
                                             'Cancel this booking? ' +
                                             'A fee may apply.')">
@@ -821,6 +871,59 @@
         <!-- Wine Image -->
         <div class="wine-image">&#127863;</div>
 
+        <!-- Premium Beverage Selection -->
+        <div class="beverage-card">
+            <h3>Premium Beverage Selection</h3>
+
+            <div class="beverage-field">
+                <label>Wine Pairing</label>
+                <select id="wineSelect" onchange="updateSummary()">
+                    <option value="0">None Selected</option>
+                    <%
+                        if (beverages != null) {
+                            for (MenuItem bev : beverages) {
+                                if (bev.getItemType().toLowerCase()
+                                        .contains("wine")) {
+                    %>
+                    <option value="<%= bev.getItemId() %>|<%= bev.getPrice() %>">
+                        <%= bev.getName() %> —
+                        Rs.<%= String.format("%.2f",
+                            bev.getPrice()) %>
+                    </option>
+                    <%
+                                }
+                            }
+                        }
+                    %>
+                </select>
+            </div>
+
+            <div class="beverage-field">
+                <label>Whiskey Reserve</label>
+                <select id="whiskeySelect" onchange="updateSummary()">
+                    <option value="0">None Selected</option>
+                    <%
+                        if (beverages != null) {
+                            for (MenuItem bev : beverages) {
+                                if (bev.getItemType().toLowerCase()
+                                        .contains("whiskey") ||
+                                        bev.getItemType().toLowerCase()
+                                                .contains("whisky")) {
+                    %>
+                    <option value="<%= bev.getItemId() %>|<%= bev.getPrice() %>">
+                        <%= bev.getName() %> —
+                        Rs.<%= String.format("%.2f",
+                            bev.getPrice()) %>
+                    </option>
+                    <%
+                                }
+                            }
+                        }
+                    %>
+                </select>
+            </div>
+        </div>
+
         <!-- Reservation Summary -->
         <div class="summary-card">
             <h3>Reservation Summary</h3>
@@ -829,6 +932,18 @@
                  style="display:none;">
                 <span id="tableLabel">Table</span>
                 <span id="tablePrice">Rs. 0.00</span>
+            </div>
+
+            <div class="summary-row" id="wineRow"
+                 style="display:none;">
+                <span id="wineLabel">Wine</span>
+                <span id="winePrice">Rs. 0.00</span>
+            </div>
+
+            <div class="summary-row" id="whiskeyRow"
+                 style="display:none;">
+                <span id="whiskeyLabel">Whiskey</span>
+                <span id="whiskeyPrice">Rs. 0.00</span>
             </div>
 
             <div class="summary-row total">
@@ -853,6 +968,10 @@
                        name="bookingTime" value=""/>
                 <input type="hidden" id="hiddenGuests"
                        name="guestCount" value=""/>
+                <input type="hidden" id="hiddenWineId"
+                       name="wineItemId" value="0"/>
+                <input type="hidden" id="hiddenWhiskeyId"
+                       name="whiskeyItemId" value="0"/>
                 <button type="submit" class="btn-confirm">
                     Confirm Booking
                 </button>
@@ -901,10 +1020,12 @@
     }
 
     function updateSummary() {
-        var tableRow  = document.getElementById('tableRow');
+        var total = 0;
+
+        // Table row
+        var tableRow   = document.getElementById('tableRow');
         var tableLabel = document.getElementById('tableLabel');
         var tablePrice = document.getElementById('tablePrice');
-        var totalPrice = document.getElementById('totalPrice');
 
         if (selectedTable) {
             var guests = document.getElementById('guestCount').value;
@@ -914,12 +1035,51 @@
                 ' (' + guests + ' Guests)';
             tablePrice.textContent = 'Rs. ' +
                 TABLE_BASE_PRICE.toFixed(2);
-            totalPrice.textContent = 'Rs. ' +
-                TABLE_BASE_PRICE.toFixed(2);
+            total += TABLE_BASE_PRICE;
         } else {
             tableRow.style.display = 'none';
-            totalPrice.textContent = 'Rs. 0.00';
         }
+
+        // Wine row
+        var wineVal = document.getElementById('wineSelect').value;
+        var wineRow   = document.getElementById('wineRow');
+        var wineLabel = document.getElementById('wineLabel');
+        var winePrice = document.getElementById('winePrice');
+
+        if (wineVal && wineVal !== '0') {
+            var wineParts = wineVal.split('|');
+            var wineP = parseFloat(wineParts[1]) || 0;
+            wineRow.style.display = 'flex';
+            wineLabel.textContent = 'Wine Pairing';
+            winePrice.textContent = 'Rs. ' + wineP.toFixed(2);
+            total += wineP;
+            document.getElementById('hiddenWineId').value = wineParts[0];
+        } else {
+            wineRow.style.display = 'none';
+            document.getElementById('hiddenWineId').value = '0';
+        }
+
+        // Whiskey row
+        var whiskeyVal = document.getElementById('whiskeySelect').value;
+        var whiskeyRow   = document.getElementById('whiskeyRow');
+        var whiskeyLabel = document.getElementById('whiskeyLabel');
+        var whiskeyPrice = document.getElementById('whiskeyPrice');
+
+        if (whiskeyVal && whiskeyVal !== '0') {
+            var wParts = whiskeyVal.split('|');
+            var whiskeyP = parseFloat(wParts[1]) || 0;
+            whiskeyRow.style.display = 'flex';
+            whiskeyLabel.textContent = 'Whiskey Reserve';
+            whiskeyPrice.textContent = 'Rs. ' + whiskeyP.toFixed(2);
+            total += whiskeyP;
+            document.getElementById('hiddenWhiskeyId').value = wParts[0];
+        } else {
+            whiskeyRow.style.display = 'none';
+            document.getElementById('hiddenWhiskeyId').value = '0';
+        }
+
+        document.getElementById('totalPrice').textContent =
+            'Rs. ' + total.toFixed(2);
     }
 
     function fetchTables() {
