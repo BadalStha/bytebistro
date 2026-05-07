@@ -89,7 +89,7 @@
         <div class="item-id">#BB-<%= String.format("%03d", item.getItemId()) %></div>
         <div class="item-name"><%= item.getName() %></div>
         <div class="item-type"><%= item.getItemType() %></div>
-        <div class="item-price">$<%= String.format("%.2f", item.getPrice()) %></div>
+        <div class="item-price">₨<%= String.format("%.2f", item.getPrice()) %></div>
         <div>
                 <span class="status-badge <%= item.isAvailable() ? "status-available" : "status-soldout" %>">
                     <%= item.isAvailable() ? "AVAILABLE" : "SOLD OUT" %>

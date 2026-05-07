@@ -12,22 +12,30 @@ import java.util.List;
 
 public class MenuDao {
 
-    public static boolean insertMenuItem(MenuItem item) throws SQLException{
-        String query = "INSERT INTO menu_item (name, description, price, item_type, is_available) VALUES (?, ?, ?, ?, ?)";
+    /**
+     *
+     * @param item
+     * @return
+     * @throws SQLException
+     */
+    public static int insertMenuItem(MenuItem item) throws SQLException {
+        String query = "INSERT INTO menu_items (name, description, price, item_type, is_available) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement st = conn.prepareStatement(query)) {
-            st.setString(1, item.getName());
-            st.setString(2, item.getDescription());
-            st.setDouble(3, item.getPrice());
-            st.setString(4, item.getItemType());
-            st.setBoolean(5, item.isAvailable());
+             PreparedStatement ps = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
+            ps.setString(1, item.getName());
+            ps.setString(2, item.getDescription());
+            ps.setDouble(3, item.getPrice());
+            ps.setString(4, item.getItemType());
+            ps.setBoolean(5, item.isAvailable());
 
-            int insertedRows = st.executeUpdate();
-            if (insertedRows == 0) {
-                return false;
-            } else {
-                return true;
+            ps.executeUpdate();
+
+            // Get the generated item ID
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                return rs.getInt(1);
             }
+            return -1;
         }
     }
 
