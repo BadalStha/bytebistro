@@ -1,4 +1,4 @@
-package com.bytebistro.order.model;
+/*package com.bytebistro.order.model;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -65,3 +65,5 @@ public class Order {
         this.orderedAt = orderedAt;
     }
 }
+*/
+
