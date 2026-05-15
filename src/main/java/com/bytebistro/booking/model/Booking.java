@@ -17,7 +17,6 @@ public class Booking {
     // Extra fields for display purposes
     private int tableNumber;
     private int seatingCapacity;
-    private String fullName;
 
     // Default constructor
     public Booking() {}
@@ -47,7 +46,6 @@ public class Booking {
     public double getCancellationFee() { return cancellationFee; }
     public int getTableNumber() { return tableNumber; }
     public int getSeatingCapacity() { return seatingCapacity; }
-    public String getFullName() { return fullName; }
 
     // Setters
     public void setBookingId(int bookingId) { this.bookingId = bookingId; }
@@ -60,5 +58,4 @@ public class Booking {
     public void setCancellationFee(double cancellationFee) { this.cancellationFee = cancellationFee; }
     public void setTableNumber(int tableNumber) { this.tableNumber = tableNumber; }
     public void setSeatingCapacity(int seatingCapacity) { this.seatingCapacity = seatingCapacity; }
-    public void setFullName(String fullName) { this.fullName = fullName; }
 }
