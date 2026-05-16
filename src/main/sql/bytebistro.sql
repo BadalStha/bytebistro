@@ -40,15 +40,6 @@ create table bookings(
     foreign key (table_id) references table_info(table_id)
 );
 
-create table booking_beverages(
-	booking_beverage_id int primary key auto_increment,
-    booking_id int not null,
-    item_id int not null,
-    quantity int not null,
-    foreign key (booking_id) references bookings(booking_id),
-    foreign key (item_id) references menu_items(item_id)
-);
-
 create table orders(
 	order_id int primary key auto_increment,
     user_id int not null,
@@ -107,4 +98,13 @@ create table menu_item_images(
     image_path varchar(255) not null,
     uploaded_at timestamp default current_timestamp,
     foreign key (item_id) references menu_items(item_id) on delete cascade
+);
+
+create table booking_payments(
+    payment_id int primary key auto_increment,
+    booking_id int not null,
+    payment_proof_path varchar(255) not null,
+    payment_status varchar(20) default 'pending',
+    uploaded_at timestamp default current_timestamp,
+    foreign key (booking_id) references bookings(booking_id)
 );

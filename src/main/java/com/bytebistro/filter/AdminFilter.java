@@ -13,7 +13,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-
+@WebFilter("/admin/*")
 public class AdminFilter implements Filter {
 
     @Override

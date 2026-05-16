@@ -16,7 +16,7 @@ import jakarta.servlet.http.Part;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/admin/menu")
+@WebServlet(urlPatterns = {"/admin/menu", "/admin/edit-menu-item"})
 @MultipartConfig
 public class MenuServlet extends HttpServlet {
 
@@ -44,6 +44,11 @@ public class MenuServlet extends HttpServlet {
                 int id = Integer.parseInt(req.getParameter("id"));
                 MenuItem menuItem = MenuDao.fetchMenuItemById(id);
                 req.setAttribute("menuItem", menuItem);
+                
+                // Also fetch the current image
+                Image image = ImageDao.getImageByItemId(id);
+                req.setAttribute("image", image);
+                
             } catch (Exception e) {
                 req.setAttribute("error", "Unable to fetch menu item: " + e.getMessage());
             }
@@ -54,7 +59,7 @@ public class MenuServlet extends HttpServlet {
                 int id = Integer.parseInt(req.getParameter("id"));
                 boolean result = MenuDao.deleteMenuItem(id);
                 if (result) {
-                    resp.sendRedirect("/admin/menu?page=list");
+                    resp.sendRedirect(req.getContextPath() + "/admin/menu?page=list");
                     return;
                 } else {
                     req.setAttribute("error", "Unable to delete item");
@@ -90,8 +95,9 @@ public class MenuServlet extends HttpServlet {
             throws ServletException, IOException {
 
         String action = req.getParameter("action");
+        String uri = req.getRequestURI();
 
-        if ("add".equals(action)) {
+        if ("add".equals(action) || (action == null && !uri.contains("edit"))) {
             String name = req.getParameter("name");
             String description = req.getParameter("description");
             double price = Double.parseDouble(req.getParameter("price"));
@@ -112,10 +118,10 @@ public class MenuServlet extends HttpServlet {
                     // Save image if uploaded
                     if (imagePart != null && imagePart.getSize() > 0) {
                         String imagePath = ImageUtils.saveImageInDirectory(imagePart);
-                        boolean imageResult = ImageDao.insertImageDetails(String.valueOf(newItemId), imagePath);
+                        ImageDao.insertImageDetails(String.valueOf(newItemId), imagePath);
                     }
 
-                    resp.sendRedirect("/admin/menu?page=list");
+                    resp.sendRedirect(req.getContextPath() + "/admin/menu?page=list");
                     return;
                 } else {
                     req.setAttribute("error", "Failed to add item");
@@ -123,6 +129,47 @@ public class MenuServlet extends HttpServlet {
             } catch (Exception e) {
                 req.setAttribute("error", e.getMessage());
             }
+            req.getRequestDispatcher("/pages/admin/menu-form.jsp").forward(req, resp);
+
+        } else if (uri.contains("edit") || "edit".equals(action)) {
+            int itemId = Integer.parseInt(req.getParameter("itemId"));
+            String name = req.getParameter("name");
+            String description = req.getParameter("description");
+            double price = Double.parseDouble(req.getParameter("price"));
+            String itemType = req.getParameter("itemType");
+            boolean isAvailable = "true".equals(req.getParameter("isAvailable"));
+            Part imagePart = req.getPart("itemImage");
+
+            MenuItem item = new MenuItem();
+            item.setItemId(itemId);
+            item.setName(name);
+            item.setDescription(description);
+            item.setPrice(price);
+            item.setItemType(itemType);
+            item.setAvailable(isAvailable);
+
+            try {
+                boolean result = MenuDao.updateMenuItem(item);
+                if (result) {
+                    // Update image if new one uploaded
+                    if (imagePart != null && imagePart.getSize() > 0) {
+                        String imagePath = ImageUtils.saveImageInDirectory(imagePart);
+                        // Delete old image record first (optional, depends on design)
+                        ImageDao.deleteImageByItemId(itemId);
+                        ImageDao.insertImageDetails(String.valueOf(itemId), imagePath);
+                    }
+
+                    resp.sendRedirect(req.getContextPath() + "/admin/menu?page=list");
+                    return;
+                } else {
+                    req.setAttribute("error", "Failed to update item");
+                }
+            } catch (Exception e) {
+                req.setAttribute("error", e.getMessage());
+            }
+            
+            // If failed, reload the form with current data
+            req.setAttribute("menuItem", item);
             req.getRequestDispatcher("/pages/admin/menu-form.jsp").forward(req, resp);
         }
     }

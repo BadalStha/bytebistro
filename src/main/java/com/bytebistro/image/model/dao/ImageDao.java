@@ -48,7 +48,7 @@ public class ImageDao {
     }
 
     public static boolean deleteImageByItemId(int itemId) throws SQLException {
-        String query = "DELETE FROM menu_item images WHERE item_id = ?";
+        String query = "DELETE FROM menu_item_images WHERE item_id = ?";
         try (Connection conn = DBConnection.getConnection();
                 PreparedStatement st = conn.prepareStatement(query)) {
             st.setInt(1, itemId);

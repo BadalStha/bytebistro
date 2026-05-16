@@ -1,4 +1,4 @@
-/*package com.bytebistro.order.model;
+package com.bytebistro.order.model;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -57,13 +57,29 @@ public class Order {
         this.status = status;
     }
 
-    public String getOrderedAt() {
+    public Timestamp getOrderedAt() {
         return orderedAt;
     }
 
-    public void setOrderedAt(String orderedAt) {
+    public void setOrderedAt(Timestamp orderedAt) {
         this.orderedAt = orderedAt;
     }
+
+    public List<OrderItem> getOrderItems() {
+        return orderItems;
+    }
+
+    public void setOrderItems(List<OrderItem> orderItems) {
+        this.orderItems = orderItems;
+    }
+
+    public double getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(double totalAmount) {
+        this.totalAmount = totalAmount;
+    }
 }
-*/
+
 

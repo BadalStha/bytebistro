@@ -18,7 +18,7 @@ public class ImageUtils {
 
         imagePart.write(location + File.separator + fileName);
 
-        return "uploads/menu-items/"+fileName;
+        return "uploads/" + fileName;
     }
 
 }

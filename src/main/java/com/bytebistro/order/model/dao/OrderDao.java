@@ -1,4 +1,4 @@
-/*package com.bytebistro.order.model.dao;
+package com.bytebistro.order.model.dao;
 
 import com.bytebistro.order.model.Order;
 import com.bytebistro.utils.DBConnection;
@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class OrderDao {
                 int userId = rs.getInt("user_id");
                 String deliveryAddress = rs.getString("delivery_address");
                 String status = rs.getString("status");
-                String orderedAt = rs.getString("ordered_at");
+                Timestamp orderedAt = rs.getTimestamp("ordered_at");
 
                 Order o = new Order(orderId, userId, deliveryAddress, status, orderedAt);
                 orderList.add(o);
@@ -43,7 +44,7 @@ public class OrderDao {
                 int userId = rs.getInt("user_id");
                 String deliveryAddress = rs.getString("delivery_address");
                 String status = rs.getString("status");
-                String orderedAt = rs.getString("ordered_at");
+                Timestamp orderedAt = rs.getTimestamp("ordered_at");
                 return new Order(id, userId, deliveryAddress, status, orderedAt);
             }
             return null;
@@ -64,7 +65,7 @@ public class OrderDao {
                 int userId = rs.getInt("user_id");
                 String deliveryAddress = rs.getString("delivery_address");
                 String status = rs.getString("status");
-                String orderedAt = rs.getString("ordered_at");
+                Timestamp orderedAt = rs.getTimestamp("ordered_at");
 
                 Order o = new Order(orderId, userId, deliveryAddress, status, orderedAt);
                 orderList.add(o);
@@ -86,7 +87,7 @@ public class OrderDao {
                 int orderId = rs.getInt("order_id");
                 String deliveryAddress = rs.getString("delivery_address");
                 String status = rs.getString("status");
-                String orderedAt = rs.getString("ordered_at");
+                Timestamp orderedAt = rs.getTimestamp("ordered_at");
 
                 Order o = new Order(orderId, userId, deliveryAddress, status, orderedAt);
                 orderList.add(o);
@@ -96,4 +97,3 @@ public class OrderDao {
     }
 
 }
-*/

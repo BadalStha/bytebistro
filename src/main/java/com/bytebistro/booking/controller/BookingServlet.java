@@ -1,19 +1,19 @@
 package com.bytebistro.booking.controller;
 
 import com.bytebistro.booking.model.Booking;
-import com.bytebistro.booking.model.BookingBeverage;
 import com.bytebistro.booking.model.TableInfo;
-import com.bytebistro.booking.model.dao.BookingBeverageDao;
 import com.bytebistro.booking.model.dao.BookingDao;
 import com.bytebistro.booking.model.dao.TableInfoDao;
-import com.bytebistro.menu.model.MenuItem;
+import com.bytebistro.utils.ImageUtils;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.Part;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet("/booking")
+@MultipartConfig
 public class BookingServlet extends HttpServlet {
 
     // GET - display booking form or
@@ -33,7 +34,7 @@ public class BookingServlet extends HttpServlet {
 
         HttpSession session = req.getSession(false);
         if (session == null || session.getAttribute("userId") == null) {
-            res.sendRedirect(req.getContextPath() + "/login");
+            res.sendRedirect(req.getContextPath() + "/pages/common/register.jsp");
             return;
         }
 
@@ -50,42 +51,65 @@ public class BookingServlet extends HttpServlet {
                 res.setCharacterEncoding("UTF-8");
                 PrintWriter out = res.getWriter();
 
-                if (bookingDate == null || bookingDate.trim().isEmpty() ||
-                        bookingTime == null || bookingTime.trim().isEmpty()) {
-                    out.print("{\"error\": \"Date and time are required.\"}");
+                try {
+                    if (bookingDate == null || bookingDate.trim().isEmpty() ||
+                            bookingTime == null || bookingTime.trim().isEmpty()) {
+                        out.print("{\"error\": \"Date and time are required.\"}");
+                        out.flush();
+                        return;
+                    }
+
+                    TableInfoDao dao = new TableInfoDao();
+                    List<TableInfo> tables = dao.getAvailableTables(bookingDate, bookingTime);
+
+                    // Build JSON response
+                    StringBuilder json = new StringBuilder("[");
+                    for (int i = 0; i < tables.size(); i++) {
+                        TableInfo t = tables.get(i);
+                        json.append("{");
+                        json.append("\"tableId\":").append(t.getTableId()).append(",");
+                        json.append("\"tableNumber\":").append(t.getTableNumber()).append(",");
+                        json.append("\"seatingCapacity\":").append(t.getSeatingCapacity());
+                        json.append("}");
+                        if (i < tables.size() - 1) json.append(",");
+                    }
+                    json.append("]");
+                    out.print(json.toString());
                     out.flush();
-                    return;
+                } catch (Exception ex) {
+                    out.print("{\"error\": \"" + ex.getMessage() + "\"}");
+                    out.flush();
                 }
+                return;
+            }
 
-                TableInfoDao TableInfoDao = new TableInfoDao();
-                List<TableInfo> tables = TableInfoDao.getAvailableTables(
-                        bookingDate, bookingTime);
-
-                // Build JSON response
-                StringBuilder json = new StringBuilder("[");
-                for (int i = 0; i < tables.size(); i++) {
-                    TableInfo t = tables.get(i);
-                    json.append("{");
-                    json.append("\"tableId\":").append(t.getTableId()).append(",");
-                    json.append("\"tableNumber\":").append(t.getTableNumber()).append(",");
-                    json.append("\"seatingCapacity\":").append(t.getSeatingCapacity());
-                    json.append("}");
-                    if (i < tables.size() - 1) json.append(",");
+            // Payment page request
+            if ("payment".equals(action)) {
+                String bookingIdStr = req.getParameter("bookingId");
+                if (bookingIdStr != null) {
+                    int bookingId = Integer.parseInt(bookingIdStr);
+                    BookingDao bookingDao = new BookingDao();
+                    Booking booking = bookingDao.getBookingById(bookingId);
+                    if (booking != null && booking.getUserId() == userId) {
+                        req.setAttribute("booking", booking);
+                        req.getRequestDispatcher("/pages/member/booking-payment.jsp")
+                                .forward(req, res);
+                        return;
+                    }
                 }
-                json.append("]");
-                out.print(json.toString());
-                out.flush();
+                res.sendRedirect(req.getContextPath() + "/booking?error=Invalid booking.");
                 return;
             }
 
             // Load all data for booking form
             loadFormData(req, userId);
-            req.getRequestDispatcher("/pages/member/booking-form.jsp")
+            req.getRequestDispatcher("/pages/member/member-booking-form.jsp")
                     .forward(req, res);
 
         } catch (Exception e) {
+            e.printStackTrace(); // Log to console for debugging
             req.setAttribute("error", e.getMessage());
-            req.getRequestDispatcher("/pages/member/booking-form.jsp")
+            req.getRequestDispatcher("/pages/member/member-booking-form.jsp")
                     .forward(req, res);
         }
     }
@@ -97,12 +121,18 @@ public class BookingServlet extends HttpServlet {
 
         HttpSession session = req.getSession(false);
         if (session == null || session.getAttribute("userId") == null) {
-            res.sendRedirect(req.getContextPath() + "/login");
+            res.sendRedirect(req.getContextPath() + "/pages/common/register.jsp");
             return;
         }
 
         int userId = (int) session.getAttribute("userId");
         String action = req.getParameter("action");
+
+        // Handle payment proof upload
+        if ("uploadPayment".equals(action)) {
+            handlePaymentUpload(req, res, userId);
+            return;
+        }
 
         // Handle cancel booking
         if ("cancel".equals(action)) {
@@ -133,9 +163,7 @@ public class BookingServlet extends HttpServlet {
         String bookingTime   = req.getParameter("bookingTime");
         String guestCountStr = req.getParameter("guestCount");
 
-        // Get beverage fields
-        String wineItemIdStr    = req.getParameter("wineItemId");
-        String whiskeyItemIdStr = req.getParameter("whiskeyItemId");
+        // Beverage parameters removed
 
         // Validate empty fields
         if (tableIdStr == null || tableIdStr.trim().isEmpty() ||
@@ -145,7 +173,7 @@ public class BookingServlet extends HttpServlet {
 
             req.setAttribute("error", "All fields are required.");
             loadFormData(req, userId);
-            req.getRequestDispatcher("/pages/member/booking-form.jsp")
+            req.getRequestDispatcher("/pages/member/member-booking-form.jsp")
                     .forward(req, res);
             return;
         }
@@ -158,14 +186,14 @@ public class BookingServlet extends HttpServlet {
                 req.setAttribute("error",
                         "Guest count must be at least 1.");
                 loadFormData(req, userId);
-                req.getRequestDispatcher("/pages/member/booking-form.jsp")
+                req.getRequestDispatcher("/pages/member/member-booking-form.jsp")
                         .forward(req, res);
                 return;
             }
         } catch (NumberFormatException e) {
             req.setAttribute("error", "Invalid guest count.");
             loadFormData(req, userId);
-            req.getRequestDispatcher("/pages/member/booking-form.jsp")
+            req.getRequestDispatcher("/pages/member/member-booking-form.jsp")
                     .forward(req, res);
             return;
         }
@@ -178,14 +206,14 @@ public class BookingServlet extends HttpServlet {
                 req.setAttribute("error",
                         "Booking date cannot be in the past.");
                 loadFormData(req, userId);
-                req.getRequestDispatcher("/pages/member/booking-form.jsp")
+                req.getRequestDispatcher("/pages/member/member-booking-form.jsp")
                         .forward(req, res);
                 return;
             }
         } catch (Exception e) {
             req.setAttribute("error", "Invalid date format.");
             loadFormData(req, userId);
-            req.getRequestDispatcher("/pages/member/booking-form.jsp")
+            req.getRequestDispatcher("/pages/member/member-booking-form.jsp")
                     .forward(req, res);
             return;
         }
@@ -201,7 +229,7 @@ public class BookingServlet extends HttpServlet {
                 req.setAttribute("error",
                         "Selected table does not exist.");
                 loadFormData(req, userId);
-                req.getRequestDispatcher("/pages/member/booking-form.jsp")
+                req.getRequestDispatcher("/pages/member/member-booking-form.jsp")
                         .forward(req, res);
                 return;
             }
@@ -211,7 +239,7 @@ public class BookingServlet extends HttpServlet {
                         "Guest count exceeds table capacity of " +
                                 table.getSeatingCapacity() + " persons.");
                 loadFormData(req, userId);
-                req.getRequestDispatcher("/pages/member/booking-form.jsp")
+                req.getRequestDispatcher("/pages/member/member-booking-form.jsp")
                         .forward(req, res);
                 return;
             }
@@ -226,7 +254,7 @@ public class BookingServlet extends HttpServlet {
                         "Selected table is not available for " +
                                 "the chosen date and time.");
                 loadFormData(req, userId);
-                req.getRequestDispatcher("/pages/member/booking-form.jsp")
+                req.getRequestDispatcher("/pages/member/member-booking-form.jsp")
                         .forward(req, res);
                 return;
             }
@@ -245,59 +273,19 @@ public class BookingServlet extends HttpServlet {
                 req.setAttribute("error",
                         "Failed to create booking. Please try again.");
                 loadFormData(req, userId);
-                req.getRequestDispatcher("/pages/member/booking-form.jsp")
+                req.getRequestDispatcher("/pages/member/member-booking-form.jsp")
                         .forward(req, res);
                 return;
             }
 
-            // ── Save Beverages ───────────────────────────────────────
-            BookingBeverageDao beverageDao = new BookingBeverageDao();
-            List<BookingBeverage> beverages = new ArrayList<>();
-
-            // Add wine if selected
-            if (wineItemIdStr != null &&
-                    !wineItemIdStr.trim().isEmpty() &&
-                    !wineItemIdStr.equals("0")) {
-                try {
-                    int wineItemId = Integer.parseInt(wineItemIdStr);
-                    BookingBeverage wine = new BookingBeverage();
-                    wine.setBookingId(bookingId);
-                    wine.setItemId(wineItemId);
-                    wine.setQuantity(1);
-                    beverages.add(wine);
-                } catch (NumberFormatException e) {
-                    System.out.println("Invalid wine item ID.");
-                }
-            }
-
-            // Add whiskey if selected
-            if (whiskeyItemIdStr != null &&
-                    !whiskeyItemIdStr.trim().isEmpty() &&
-                    !whiskeyItemIdStr.equals("0")) {
-                try {
-                    int whiskeyItemId = Integer.parseInt(whiskeyItemIdStr);
-                    BookingBeverage whiskey = new BookingBeverage();
-                    whiskey.setBookingId(bookingId);
-                    whiskey.setItemId(whiskeyItemId);
-                    whiskey.setQuantity(1);
-                    beverages.add(whiskey);
-                } catch (NumberFormatException e) {
-                    System.out.println("Invalid whiskey item ID.");
-                }
-            }
-
-            // Save beverages if any selected
-            if (!beverages.isEmpty()) {
-                beverageDao.saveAllBeverages(beverages);
-            }
-
+            // Redirect to payment page instead of success
             res.sendRedirect(req.getContextPath() +
-                    "/booking?success=Table booked successfully!");
+                    "/booking?action=payment&bookingId=" + bookingId);
 
         } catch (Exception e) {
             req.setAttribute("error", e.getMessage());
             loadFormData(req, userId);
-            req.getRequestDispatcher("/pages/member/booking-form.jsp")
+            req.getRequestDispatcher("/pages/member/member-booking-form.jsp")
                     .forward(req, res);
         }
     }
@@ -306,21 +294,57 @@ public class BookingServlet extends HttpServlet {
     private void loadFormData(HttpServletRequest req, int userId) {
         try {
             BookingDao bookingDao = new BookingDao();
-            TableInfoDao TableInfoDao = new TableInfoDao();
-            BookingBeverageDao beverageDao = new BookingBeverageDao();
+            TableInfoDao tableInfoDao = new TableInfoDao();
 
-            req.setAttribute("bookings",
-                    bookingDao.getBookingsByUserId(userId));
-            req.setAttribute("tables",
-                    TableInfoDao.getAllTables());
-            req.setAttribute("totalBookings",
-                    bookingDao.getTotalBookingsByUserId(userId));
-            req.setAttribute("beverages",
-                    beverageDao.getAvailableBeverages());
+            List<Booking> bookings = bookingDao.getBookingsByUserId(userId);
+            req.setAttribute("bookings", bookings);
+            req.setAttribute("totalBookings", bookings != null ? bookings.size() : 0);
+            req.setAttribute("tables", tableInfoDao.getAllTables());
 
         } catch (Exception e) {
             System.out.println("Error loading form data: " +
                     e.getMessage());
+        }
+    }
+
+    // Handle payment proof upload
+    private void handlePaymentUpload(HttpServletRequest req, HttpServletResponse res,
+                                     int userId) throws ServletException, IOException {
+        try {
+            int bookingId = Integer.parseInt(req.getParameter("bookingId"));
+            Part paymentProof = req.getPart("paymentProof");
+
+            if (paymentProof == null || paymentProof.getSize() == 0) {
+                BookingDao bookingDao = new BookingDao();
+                Booking booking = bookingDao.getBookingById(bookingId);
+                req.setAttribute("booking", booking);
+                req.setAttribute("error", "Please upload your payment proof.");
+                req.getRequestDispatcher("/pages/member/booking-payment.jsp")
+                        .forward(req, res);
+                return;
+            }
+
+            // Save the uploaded image
+            String imagePath = ImageUtils.saveImageInDirectory(paymentProof);
+
+            // Save payment proof in database
+            BookingDao bookingDao = new BookingDao();
+            boolean saved = bookingDao.savePaymentProof(bookingId, imagePath);
+
+            if (saved) {
+                res.sendRedirect(req.getContextPath() +
+                        "/booking?success=Reservation confirmed! Payment proof submitted for verification.");
+            } else {
+                Booking booking = bookingDao.getBookingById(bookingId);
+                req.setAttribute("booking", booking);
+                req.setAttribute("error", "Failed to save payment proof. Please try again.");
+                req.getRequestDispatcher("/pages/member/booking-payment.jsp")
+                        .forward(req, res);
+            }
+
+        } catch (Exception e) {
+            res.sendRedirect(req.getContextPath() +
+                    "/booking?error=" + e.getMessage());
         }
     }
 }

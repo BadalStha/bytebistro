@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="bytebistro:war" />
+    </artifacts-to-build>
+  </component>
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="e22a34f6-5ecb-450e-811d-2c62f9384698" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/pages/member/member-booking-form.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/webContexts.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bytebistro/bill/model/dao/BillDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bytebistro/bill/model/dao/BillDao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bytebistro/booking/controller/BookingServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bytebistro/booking/controller/BookingServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bytebistro/booking/model/Booking.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bytebistro/booking/model/Booking.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bytebistro/booking/model/BookingBeverage.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bytebistro/booking/model/dao/BookingBeverageDao.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bytebistro/booking/model/dao/BookingDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bytebistro/booking/model/dao/BookingDao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bytebistro/booking/model/dao/TableInfoDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bytebistro/booking/model/dao/TableInfoDao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bytebistro/filter/AdminFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bytebistro/filter/AdminFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bytebistro/image/model/dao/ImageDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bytebistro/image/model/dao/ImageDao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bytebistro/menu/controller/EditMenuItemServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bytebistro/menu/controller/EditMenuItemServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bytebistro/menu/controller/MenuServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bytebistro/menu/controller/MenuServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bytebistro/order/model/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bytebistro/order/model/Order.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bytebistro/order/model/dao/OrderDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bytebistro/order/model/dao/OrderDao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bytebistro/report/controller/ReportServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bytebistro/report/controller/ReportServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bytebistro/user/controller/AuthenticationServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bytebistro/user/controller/AuthenticationServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bytebistro/user/controller/LoginServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bytebistro/user/controller/LoginServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bytebistro/utils/ImageUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bytebistro/utils/ImageUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/sql/bytebistro.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/sql/bytebistro.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/components/admin-footer.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/components/admin-footer.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/components/admin-header.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/components/admin-header.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/components/user-footer.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/components/user-footer.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/components/user-header.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/components/user-header.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/index.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/admin/analytics.jsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/admin/bill-view.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/admin/bill-view.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/admin/dashboard.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/admin/dashboard.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/admin/financial-report.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/admin/financial-report.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/admin/menu-form.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/admin/menu-form.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/admin/menu-list.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/admin/menu-list.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/admin/promotions.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/admin/promotions.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/common/about.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/common/about.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/common/contact.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/common/contact.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/common/error.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/common/error.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/common/footer.jsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/common/login.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/common/login.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/common/menu-view.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/common/menu-view.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/common/navbar.jsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/common/rating-form.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/common/rating-form.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/common/register.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/common/register.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/member/booking-form.jsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/member/dashboard.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/member/dashboard.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/member/order-form.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/member/order-form.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/member/order-history.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/member/order-history.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/member/profile.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/member/profile.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/visitor/booking-form.jsp" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="CSS File" />
+        <option value="Jsp File" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;BadalStha&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/BadalStha/bytebistro.git&quot;,
+    &quot;accountId&quot;: &quot;8198114b-39b2-4272-a28b-9cce77e467f8&quot;
+  }
+}</component>
+  <component name="LogFilters">
+    <option name="FILTER_ERRORS" value="false" />
+    <option name="FILTER_WARNINGS" value="false" />
+    <option name="FILTER_INFO" value="true" />
+    <option name="FILTER_DEBUG" value="true" />
+    <option name="CUSTOM_FILTER" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHomeTypeForPersistence" value="WRAPPER" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6,
+  &quot;fromUser&quot;: false
+}</component>
+  <component name="ProjectId" id="3C6ZVKagy8HE71yjRXZyg8glmcJ" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;Tomcat Server.Tomcat 10.1.52 (1).executor&quot;: &quot;Run&quot;,
+    &quot;Tomcat Server.Tomcat 10.1.52.executor&quot;: &quot;Run&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/badal/Documents/college/advanceProgramming/coursework/code/bytebistro&quot;,
+    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Problems&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;project.propCompiler&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/webapp/pages/common" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="configurationStatuses">
+      <map>
+        <entry key="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory">
+          <value>
+            <map>
+              <entry key="Tomcat 10.1.52" value="STOPPED" />
+            </map>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration name="Tomcat 10.1.52" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 10.1.52" ALTERNATIVE_JRE_ENABLED="false" nameIsGenerated="true">
+      <option name="UPDATING_POLICY" value="restart-server" />
+      <deployment>
+        <artifact name="bytebistro:war exploded">
+          <settings>
+            <option name="CONTEXT_PATH" value="" />
+          </settings>
+        </artifact>
+      </deployment>
+      <server-settings>
+        <option name="BASE_DIRECTORY_NAME" value="6f0a8638-1c23-4603-a51b-6f0dd14cd664" />
+      </server-settings>
+      <predefined_log_file enabled="true" id="Tomcat" />
+      <predefined_log_file enabled="true" id="Tomcat Catalina" />
+      <predefined_log_file id="Tomcat Manager" />
+      <predefined_log_file id="Tomcat Host Manager" />
+      <predefined_log_file id="Tomcat Localhost Access" />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="36713" />
+      </RunnerSettings>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Cover">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Debug">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Profile">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Run">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
+      <method v="2">
+        <option name="Make" enabled="true" />
+        <option name="BuildArtifacts" enabled="true">
+          <artifact name="bytebistro:war exploded" />
+        </option>
+      </method>
+    </configuration>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e22a34f6-5ecb-450e-811d-2c62f9384698" name="Changes" comment="" />
+      <created>1775708003700</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1775708003700</updated>
+      <workItem from="1775708004922" duration="3596000" />
+      <workItem from="1775716919082" duration="512000" />
+      <workItem from="1775811347590" duration="1074000" />
+      <workItem from="1775818889509" duration="1646000" />
+      <workItem from="1775821290561" duration="158000" />
+      <workItem from="1775821487683" duration="1337000" />
+      <workItem from="1775829087025" duration="915000" />
+      <workItem from="1775904840966" duration="1080000" />
+      <workItem from="1775962691944" duration="8700000" />
+      <workItem from="1776046925362" duration="23000" />
+      <workItem from="1776911019949" duration="4097000" />
+      <workItem from="1777707821160" duration="24262000" />
+      <workItem from="1777774531070" duration="1277000" />
+      <workItem from="1777821526929" duration="1213000" />
+      <workItem from="1777825534563" duration="210000" />
+      <workItem from="1777825860460" duration="365000" />
+      <workItem from="1777826296640" duration="1589000" />
+      <workItem from="1777861578647" duration="28000" />
+      <workItem from="1777863458101" duration="774000" />
+      <workItem from="1777944665433" duration="3049000" />
+      <workItem from="1777989178784" duration="1751000" />
+      <workItem from="1778120924271" duration="1968000" />
+      <workItem from="1778157175130" duration="630000" />
+      <workItem from="1778249384574" duration="265000" />
+      <workItem from="1778423753882" duration="187000" />
+      <workItem from="1778550791570" duration="1832000" />
+      <workItem from="1778565274893" duration="20000" />
+      <workItem from="1778592676167" duration="91000" />
+      <workItem from="1778671916751" duration="1030000" />
+      <workItem from="1778729303685" duration="541000" />
+      <workItem from="1778828729171" duration="55000" />
+      <workItem from="1778833168949" duration="1216000" />
+      <workItem from="1778901312489" duration="45000" />
+      <workItem from="1778917283164" duration="133000" />
+      <workItem from="1778917440784" duration="255000" />
+      <workItem from="1778917971146" duration="15404000" />
+      <workItem from="1778941163262" duration="755000" />
+      <workItem from="1778941931159" duration="796000" />
+      <workItem from="1778942753633" duration="544000" />
+      <workItem from="1778943697675" duration="204000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="menuManagement" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
