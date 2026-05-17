@@ -1,5 +1,6 @@
-</div> <!-- container -->
-</div> <!-- main-container -->
+</main>
+</div> <!-- bb-main-wrap -->
+</div> <!-- bb-app -->
 
 </body>
 </html>
