@@ -2,6 +2,7 @@ package com.bytebistro.user.controller;
 
 import com.bytebistro.user.model.User;
 import com.bytebistro.user.model.dao.UserDao;
+import com.bytebistro.booking.model.dao.BookingDao;
 import com.bytebistro.utils.PasswordUtil;
 
 import jakarta.servlet.ServletException;
@@ -41,6 +42,11 @@ public class ProfileServlet extends HttpServlet {
                 res.sendRedirect(req.getContextPath() + "/login");
                 return;
             }
+
+            // Fetch total bookings count
+            BookingDao bookingDao = new BookingDao();
+            int totalBookings = bookingDao.getTotalBookingsByUserId(userId);
+            req.setAttribute("totalBookings", totalBookings);
 
             // Set user object in request
             req.setAttribute("user", user);
@@ -199,6 +205,10 @@ public class ProfileServlet extends HttpServlet {
         try {
             User user = dao.getUserById(userId);
             req.setAttribute("user", user);
+
+            BookingDao bookingDao = new BookingDao();
+            int totalBookings = bookingDao.getTotalBookingsByUserId(userId);
+            req.setAttribute("totalBookings", totalBookings);
         } catch (Exception e) {
             System.out.println("Error loading user: " + e.getMessage());
         }

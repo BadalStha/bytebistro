@@ -31,10 +31,8 @@ public class AuthenticationServlet extends HttpServlet {
                     res.sendRedirect(req.getContextPath() + "/pages/admin/dashboard.jsp");
                 } else if (role.equals("member")) {
                     res.sendRedirect(req.getContextPath() + "/pages/member/dashboard.jsp");
-                } else if (role.equals("visitor")) {
-                    res.sendRedirect(req.getContextPath() + "/pages/visitor/booking-form.jsp");
                 } else {
-                    res.sendRedirect(req.getContextPath() + "/login");
+                    res.sendRedirect(req.getContextPath() + "/index.jsp");
                 }
 
             } else {
