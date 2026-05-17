@@ -12,12 +12,7 @@ import java.util.List;
 
 public class MenuDao {
 
-    /**
-     *
-     * @param item
-     * @return
-     * @throws SQLException
-     */
+
     public static int insertMenuItem(MenuItem item) throws SQLException {
         String query = "INSERT INTO menu_items (name, description, price, item_type, is_available) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
@@ -66,7 +61,7 @@ public class MenuDao {
     public static MenuItem fetchMenuItemById(int id) throws SQLException{
         String query = "SELECT * FROM menu_items WHERE item_id = ?";
         try (Connection conn = DBConnection.getConnection();
-                PreparedStatement st = conn.prepareStatement(query)) {
+             PreparedStatement st = conn.prepareStatement(query)) {
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
 
@@ -90,7 +85,7 @@ public class MenuDao {
         String query = "UPDATE menu_items SET name = ?, description = ?, price = ?, item_type = ?, is_available = ? WHERE item_id = ?";
 
         try (Connection conn = DBConnection.getConnection();
-                PreparedStatement st = conn.prepareStatement(query)) {
+             PreparedStatement st = conn.prepareStatement(query)) {
 
             st.setString(1, item.getName());
             st.setString(2, item.getDescription());
@@ -112,7 +107,7 @@ public class MenuDao {
         String query = "DELETE FROM menu_items WHERE item_id = ?";
 
         try (Connection conn = DBConnection.getConnection();
-                PreparedStatement st = conn.prepareStatement(query)) {
+             PreparedStatement st = conn.prepareStatement(query)) {
 
             st.setInt(1, id);
 
@@ -129,7 +124,7 @@ public class MenuDao {
 
         String query = "SELECT * FROM menu_items WHERE name LIKE ? OR item_type LIKE ?";
         try (Connection conn = DBConnection.getConnection();
-                PreparedStatement st = conn.prepareStatement(query)) {
+             PreparedStatement st = conn.prepareStatement(query)) {
             st.setString(1, "%" + keyword + "%");
             st.setString(2, "%" + keyword + "%");
 
@@ -151,59 +146,6 @@ public class MenuDao {
             }
             return menuList;
         }
-    }
-    // Method to get all available menu items
-    public List<MenuItem> getAvailableMenuItems() {
-        List<MenuItem> menuItems = new ArrayList<>();
-        String sql = "SELECT * FROM menu_items WHERE is_available = true ORDER BY item_type ASC";
-
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                MenuItem item = new MenuItem();
-                item.setItemId(rs.getInt("item_id"));
-                item.setName(rs.getString("name"));
-                item.setDescription(rs.getString("description"));
-                item.setPrice(rs.getDouble("price"));
-                item.setItemType(rs.getString("item_type"));
-                item.setAvailable(rs.getBoolean("is_available"));
-                menuItems.add(item);
-            }
-
-        } catch (Exception e) {
-            System.out.println("Error fetching menu items: " + e.getMessage());
-        }
-        return menuItems;
-    }
-
-    // Method to get single menu item by ID
-    public MenuItem getMenuItemById(int itemId) {
-        String sql = "SELECT * FROM menu_items WHERE item_id = ?";
-
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setInt(1, itemId);
-            ResultSet rs = ps.executeQuery();
-
-            if (rs.next()) {
-                MenuItem item = new MenuItem();
-                item.setItemId(rs.getInt("item_id"));
-                item.setName(rs.getString("name"));
-                item.setDescription(rs.getString("description"));
-                item.setPrice(rs.getDouble("price"));
-                item.setItemType(rs.getString("item_type"));
-                item.setAvailable(rs.getBoolean("is_available"));
-                return item;
-            }
-
-        } catch (Exception e) {
-            System.out.println("Error fetching menu item: " + e.getMessage());
-        }
-        return null;
     }
 }
 
