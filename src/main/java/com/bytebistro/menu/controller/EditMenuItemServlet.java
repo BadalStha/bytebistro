@@ -1,13 +1,11 @@
 package com.bytebistro.menu.controller;
 
-import com.bytebistro.image.model.Image;
 import com.bytebistro.image.model.dao.ImageDao;
 import com.bytebistro.menu.model.MenuItem;
 import com.bytebistro.menu.model.dao.MenuDao;
 import com.bytebistro.utils.ImageUtils;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,7 +13,6 @@ import jakarta.servlet.http.Part;
 
 import java.io.IOException;
 
-@WebServlet("/admin/edit-menu-item")
 @MultipartConfig
 public class EditMenuItemServlet extends HttpServlet {
 
