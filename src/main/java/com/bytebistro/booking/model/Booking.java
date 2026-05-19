@@ -17,6 +17,10 @@ public class Booking {
     // Extra fields for display purposes
     private int tableNumber;
     private int seatingCapacity;
+    private String paymentProof;
+    private String customerName;
+    private String customerEmail;
+    private String customerPhone;
 
     // Default constructor
     public Booking() {}
@@ -46,6 +50,10 @@ public class Booking {
     public double getCancellationFee() { return cancellationFee; }
     public int getTableNumber() { return tableNumber; }
     public int getSeatingCapacity() { return seatingCapacity; }
+    public String getPaymentProof() { return paymentProof; }
+    public String getCustomerName() { return customerName; }
+    public String getCustomerEmail() { return customerEmail; }
+    public String getCustomerPhone() { return customerPhone; }
 
     // Setters
     public void setBookingId(int bookingId) { this.bookingId = bookingId; }
@@ -58,4 +66,8 @@ public class Booking {
     public void setCancellationFee(double cancellationFee) { this.cancellationFee = cancellationFee; }
     public void setTableNumber(int tableNumber) { this.tableNumber = tableNumber; }
     public void setSeatingCapacity(int seatingCapacity) { this.seatingCapacity = seatingCapacity; }
+    public void setPaymentProof(String paymentProof) { this.paymentProof = paymentProof; }
+    public void setCustomerName(String customerName) { this.customerName = customerName; }
+    public void setCustomerEmail(String customerEmail) { this.customerEmail = customerEmail; }
+    public void setCustomerPhone(String customerPhone) { this.customerPhone = customerPhone; }
 }

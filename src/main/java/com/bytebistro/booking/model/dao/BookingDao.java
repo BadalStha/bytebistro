@@ -3,6 +3,7 @@ package com.bytebistro.booking.model.dao;
 import com.bytebistro.booking.model.Booking;
 import com.bytebistro.utils.DBConnection;
 
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -136,20 +137,16 @@ public class BookingDao {
         String checkSql = "SELECT booking_date FROM bookings " +
                 "WHERE booking_id = ? AND user_id = ? " +
                 "AND status = 'pending'";
-
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement checkPs = conn.prepareStatement(checkSql)) {
-
             checkPs.setInt(1, bookingId);
             checkPs.setInt(2, userId);
             ResultSet rs = checkPs.executeQuery();
-
             if (rs.next()) {
                 Date bookingDate = rs.getDate("booking_date");
                 Date today = new Date(System.currentTimeMillis());
                 long diff = bookingDate.getTime() - today.getTime();
                 long daysDiff = diff / (1000 * 60 * 60 * 24);
-
                 // Calculate cancellation fee
                 double cancellationFee = 0.00;
                 if (daysDiff <= 1) {
@@ -157,20 +154,16 @@ public class BookingDao {
                 } else if (daysDiff <= 3) {
                     cancellationFee = 250.00;
                 }
-
                 String updateSql = "UPDATE bookings SET status = 'cancelled'," +
                         " cancellation_fee = ? " +
                         "WHERE booking_id = ? AND user_id = ?";
-
                 PreparedStatement updatePs =
                         conn.prepareStatement(updateSql);
                 updatePs.setDouble(1, cancellationFee);
                 updatePs.setInt(2, bookingId);
                 updatePs.setInt(3, userId);
-
                 return updatePs.executeUpdate() > 0;
             }
-
         } catch (Exception e) {
             System.out.println("Error cancelling booking: " + e.getMessage());
         }
@@ -195,5 +188,111 @@ public class BookingDao {
             System.out.println("Error counting bookings: " + e.getMessage());
         }
         return 0;
+    }
+
+    // Method to save payment proof for a booking
+    public boolean savePaymentProof(int bookingId, String proofPath) {
+        String sql = "INSERT INTO booking_payments (booking_id, payment_proof_path) VALUES (?, ?)";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, bookingId);
+            ps.setString(2, proofPath);
+            return ps.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            System.out.println("Error saving payment proof: " + e.getMessage());
+        }
+        return false;
+    }
+
+//    // Method to get payment proof path for a booking
+//    public String getPaymentProof(int bookingId) {
+//        String sql = "SELECT payment_proof_path FROM booking_payments WHERE booking_id = ? ORDER BY uploaded_at DESC LIMIT 1";
+//
+//        try (Connection conn = DBConnection.getConnection();
+//             PreparedStatement ps = conn.prepareStatement(sql)) {
+//
+//            ps.setInt(1, bookingId);
+//            ResultSet rs = ps.executeQuery();
+//            if (rs.next()) {
+//                return rs.getString("payment_proof_path");
+//            }
+//
+//        } catch (Exception e) {
+//            System.out.println("Error fetching payment proof: " + e.getMessage());
+//        }
+//        return null;
+//    }
+
+    // Method to get all bookings with payment info (for admin)
+    public List<Booking> getAllBookingsWithPayment() {
+        List<Booking> bookings = new ArrayList<>();
+        String sql = "SELECT b.*, t.table_number, t.seating_capacity, " +
+                "u.full_name, u.email, u.phone, " +
+                "bp.payment_proof_path " +
+                "FROM bookings b " +
+                "JOIN table_info t ON b.table_id = t.table_id " +
+                "JOIN users u ON b.user_id = u.user_id " +
+                "LEFT JOIN booking_payments bp ON b.booking_id = bp.booking_id " +
+                "ORDER BY b.booking_id DESC";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Booking booking = new Booking();
+                booking.setBookingId(rs.getInt("booking_id"));
+                booking.setUserId(rs.getInt("user_id"));
+                booking.setTableId(rs.getInt("table_id"));
+                booking.setBookingDate(rs.getDate("booking_date"));
+                booking.setBookingTime(rs.getTime("booking_time"));
+                booking.setGuestCount(rs.getInt("guest_count"));
+                booking.setStatus(rs.getString("status"));
+                booking.setCancellationFee(rs.getDouble("cancellation_fee"));
+                booking.setTableNumber(rs.getInt("table_number"));
+                booking.setSeatingCapacity(rs.getInt("seating_capacity"));
+                booking.setCustomerName(rs.getString("full_name"));
+                booking.setCustomerEmail(rs.getString("email"));
+                booking.setCustomerPhone(rs.getString("phone"));
+                booking.setPaymentProof(rs.getString("payment_proof_path"));
+                bookings.add(booking);
+            }
+        } catch (Exception e) {
+            System.out.println("Error fetching all bookings: " + e.getMessage());
+        }
+        return bookings;
+    }
+
+    // Method to confirm a booking (admin)
+    public boolean confirmBooking(int bookingId) {
+        String sql = "UPDATE bookings SET status = 'confirmed' WHERE booking_id = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, bookingId);
+            return ps.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            System.out.println("Error confirming booking: " + e.getMessage());
+        }
+        return false;
+    }
+
+    // Method to reject a booking (admin)
+    public boolean rejectBooking(int bookingId) {
+        String sql = "UPDATE bookings SET status = 'cancelled' WHERE booking_id = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, bookingId);
+            return ps.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            System.out.println("Error rejecting booking: " + e.getMessage());
+        }
+        return false;
     }
 }
