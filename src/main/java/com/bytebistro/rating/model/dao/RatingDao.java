@@ -3,7 +3,9 @@ package com.bytebistro.rating.model.dao;
 import com.bytebistro.rating.model.Rating;
 import com.bytebistro.utils.DBConnection;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,9 +87,7 @@ public class RatingDao {
 
     // Method to update existing rating
     public boolean updateRating(Rating rating) {
-        String sql = "UPDATE ratings SET food_rating = ?, " +
-                "staff_rating = ?, ambience_rating = ?, " +
-                "comment = ? WHERE user_id = ?";
+        String sql = "UPDATE ratings SET food_rating = ?, staff_rating = ?, ambience_rating = ?, comment = ? WHERE user_id = ?";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -107,15 +107,19 @@ public class RatingDao {
         return false;
     }
 
-    // Method to get all ratings
-    public List<Rating> getAllRatings() {
-        List<Rating> ratings = new ArrayList<>();
-        String sql = "SELECT * FROM ratings " +
-                "ORDER BY rated_at DESC";
+
+    // Method to get latest reviews with user names
+    public List<Rating> getLatestReviews(int limit) {
+        List<Rating> reviews = new ArrayList<>();
+        String sql = "SELECT r.*, u.full_name FROM ratings r " +
+                "JOIN users u ON r.user_id = u.user_id " +
+                "WHERE r.comment IS NOT NULL AND r.comment != '' " +
+                "ORDER BY r.rated_at DESC LIMIT ?";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
+            ps.setInt(1, limit);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Rating rating = new Rating();
@@ -126,37 +130,13 @@ public class RatingDao {
                 rating.setAmbienceRating(rs.getInt("ambience_rating"));
                 rating.setComment(rs.getString("comment"));
                 rating.setRatedAt(rs.getTimestamp("rated_at"));
-                ratings.add(rating);
+                rating.setUserName(rs.getString("full_name"));
+                reviews.add(rating);
             }
 
         } catch (Exception e) {
-            System.out.println("Error fetching ratings: " +
-                    e.getMessage());
+            System.out.println("Error fetching reviews: " + e.getMessage());
         }
-        return ratings;
-    }
-
-    // Method to get average ratings
-    public double[] getAverageRatings() {
-        String sql = "SELECT AVG(food_rating), AVG(staff_rating), " +
-                "AVG(ambience_rating) FROM ratings";
-
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                return new double[]{
-                        rs.getDouble(1),
-                        rs.getDouble(2),
-                        rs.getDouble(3)
-                };
-            }
-
-        } catch (Exception e) {
-            System.out.println("Error fetching averages: " +
-                    e.getMessage());
-        }
-        return new double[]{0, 0, 0};
+        return reviews;
     }
 }

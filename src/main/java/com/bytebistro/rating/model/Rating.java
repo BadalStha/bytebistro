@@ -11,6 +11,7 @@ public class Rating {
     private int ambienceRating;
     private String comment;
     private Timestamp ratedAt;
+    private String userName; // Added for display convenience
 
     // Default constructor
     public Rating() {}
@@ -36,6 +37,7 @@ public class Rating {
     public int getAmbienceRating() { return ambienceRating; }
     public String getComment() { return comment; }
     public Timestamp getRatedAt() { return ratedAt; }
+    public String getUserName() { return userName; }
 
     // Setters
     public void setRatingId(int ratingId) { this.ratingId = ratingId; }
@@ -45,4 +47,5 @@ public class Rating {
     public void setAmbienceRating(int ambienceRating) { this.ambienceRating = ambienceRating; }
     public void setComment(String comment) { this.comment = comment; }
     public void setRatedAt(Timestamp ratedAt) { this.ratedAt = ratedAt; }
+    public void setUserName(String userName) { this.userName = userName; }
 }
