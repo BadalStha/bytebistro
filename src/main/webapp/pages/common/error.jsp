@@ -1,29 +1,36 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ include file="/components/user-header.jsp" %>
+<jsp:include page="../../components/user-header.jsp" />
 
+<div style="height: 70vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 0 24px;">
+    
+    <div style="font-family: var(--bb-font-display); font-size: clamp(8rem, 20vw, 12rem); line-height: 1; color: var(--bb-accent-soft); position: absolute; z-index: 0; user-select: none;">
+        404
+    </div>
 
-<section style="padding: 120px 40px; text-align: center; background: #f5f5dc; min-height: 60vh;">
+    <div style="position: relative; z-index: 1; animation: bbFadeUp 0.8s ease both;">
+        <span style="color: var(--bb-accent); font-weight: 700; text-transform: uppercase; letter-spacing: 0.2em; font-size: 0.8rem; display: block; margin-bottom: 16px;">THE KITCHEN IS CLOSED</span>
+        <h1 style="font-family: var(--bb-font-display); font-size: 3.5rem; margin-bottom: 24px; font-style: italic;">A Culinary Detour</h1>
+        <p style="color: var(--bb-text-muted); font-size: 1.1rem; max-width: 500px; margin: 0 auto 48px; line-height: 1.7;">
+            It seems the page you are seeking has been removed from our current editorial. Let us guide you back to the main dining room.
+        </p>
 
-    <h1 style="font-size: 6rem; color: #2c1810; margin-bottom: 10px;">404</h1>
-    <h2 style="font-size: 2rem; color: #c8a97e; margin-bottom: 20px;">Oops! Page Not Found</h2>
-    <p style="color: #555; font-size: 1.1rem; margin-bottom: 40px;">
-        The page you are looking for doesn't exist or has been moved.
-    </p>
+        <% String errorMsg = (String) request.getAttribute("errorMessage"); %>
+        <% if (errorMsg != null) { %>
+        <div class="bb-alert bb-alert--danger" style="display: inline-flex; margin-bottom: 40px;">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            <%= errorMsg %>
+        </div>
+        <% } %>
 
-    <% String errorMsg = (String) request.getAttribute("errorMessage"); %>
-    <% if (errorMsg != null) { %>
-    <p style="color: red; margin-bottom: 30px;"><%= errorMsg %></p>
-    <% } %>
+        <div style="display: flex; gap: 20px; justify-content: center;">
+            <a href="${pageContext.request.contextPath}/index.jsp" class="bb-btn bb-btn--primary" style="padding: 14px 40px;">
+                Return Home
+            </a>
+            <a href="${pageContext.request.contextPath}/pages/common/menu-view.jsp" class="bb-btn bb-btn--outline" style="padding: 14px 40px;">
+                View the Menu
+            </a>
+        </div>
+    </div>
+</div>
 
-    <a href="<%= request.getContextPath() %>/pages/index.jsp"
-       style="background: #2c1810; color: white; padding: 15px 40px; text-decoration: none; font-size: 1rem; margin-right: 15px;">
-        GO HOME
-    </a>
-    <a href="<%= request.getContextPath() %>/pages/common/menu-view.jsp"
-       style="background: #c8a97e; color: white; padding: 15px 40px; text-decoration: none; font-size: 1rem;">
-        VIEW MENU
-    </a>
-
-</section>
-
-<%@ include file="/components/user-footer.jsp" %>
+<jsp:include page="../../components/user-footer.jsp" />

@@ -32,7 +32,7 @@ public class AuthenticationServlet extends HttpServlet {
                 } else if (role.equals("member")) {
                     res.sendRedirect(req.getContextPath() + "/pages/member/dashboard.jsp");
                 } else if (role.equals("visitor")) {
-                    res.sendRedirect(req.getContextPath() + "/pages/visitor/booking-form.jsp");
+                    res.sendRedirect(req.getContextPath() + "/pages/visitor/member-visitor-booking-form.jsp");
                 } else {
                     res.sendRedirect(req.getContextPath() + "/login");
                 }

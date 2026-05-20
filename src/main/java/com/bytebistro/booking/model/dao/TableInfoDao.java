@@ -39,7 +39,7 @@ public class TableInfoDao {
         List<TableInfo> tables = new ArrayList<>();
         String sql = "SELECT * FROM table_info WHERE table_id NOT IN " +
                 "(SELECT table_id FROM bookings " +
-                "WHERE booking_date = ? AND booking_time = ? " +
+                "WHERE booking_date = ? AND booking_time LIKE ? " +
                 "AND status != 'cancelled') " +
                 "ORDER BY table_number ASC";
 
@@ -47,7 +47,7 @@ public class TableInfoDao {
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, bookingDate);
-            ps.setString(2, bookingTime);
+            ps.setString(2, bookingTime + "%");
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -87,5 +87,30 @@ public class TableInfoDao {
             System.out.println("Error fetching table: " + e.getMessage());
         }
         return null;
+    }
+
+    public boolean insertTable(int tableNumber, int capacity) {
+        String sql = "INSERT INTO table_info (table_number, seating_capacity) VALUES (?, ?)";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, tableNumber);
+            ps.setInt(2, capacity);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            System.out.println("Error inserting table: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean deleteTable(int tableId) {
+        String sql = "DELETE FROM table_info WHERE table_id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, tableId);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            System.out.println("Error deleting table: " + e.getMessage());
+            return false;
+        }
     }
 }

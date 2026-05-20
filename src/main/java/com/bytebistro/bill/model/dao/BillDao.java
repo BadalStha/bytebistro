@@ -112,33 +112,6 @@ public class BillDao {
         }
     }
 
-    public static double fetchTotalRevenue() throws SQLException {
-        String query = "SELECT SUM(final_amount) as total FROM bills";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement st = conn.prepareStatement(query)) {
-
-            ResultSet rs = st.executeQuery();
-            if (rs.next()) {
-                return rs.getDouble("total");
-            }
-            return 0;
-        }
-    }
-
-    public static double fetchDailyRevenue(String date) throws SQLException {
-        String query = "SELECT SUM(final_amount) as total FROM bills WHERE DATE(generated_at) = ?";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement st = conn.prepareStatement(query)) {
-            st.setString(1, date);
-
-            ResultSet rs = st.executeQuery();
-            if (rs.next()) {
-                return rs.getDouble("total");
-            }
-            return 0;
-        }
-    }
-
     public static List<Bill> fetchBillsByDateRange(String fromDate, String toDate) throws SQLException {
         String query = "SELECT * FROM bills WHERE DATE(generated_at) BETWEEN ? AND ?";
         try (Connection conn = DBConnection.getConnection();

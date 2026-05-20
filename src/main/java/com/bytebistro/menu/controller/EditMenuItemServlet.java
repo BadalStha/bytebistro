@@ -15,7 +15,7 @@ import jakarta.servlet.http.Part;
 
 import java.io.IOException;
 
-@WebServlet("/admin/edit-menu-item")
+// @WebServlet("/admin/edit-menu-item")
 @MultipartConfig
 public class EditMenuItemServlet extends HttpServlet {
 

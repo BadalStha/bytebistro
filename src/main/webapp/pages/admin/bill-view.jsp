@@ -2,509 +2,169 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <jsp:include page="../../components/admin-header.jsp" />
 
-<style>
-    :root {
-        --primary-red: #8b0000;
-        --dark-red: #3d0000;
-        --bg-beige: #fcfbe4;
-        --accent-pale: #f0f0c8;
-        --text-grey: #888;
-        --border-color: #e8e8c8;
-    }
-
-    body {
-        background-color: var(--bg-beige);
-        color: var(--dark-red);
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    }
-
-    h1, h2, h3, .serif {
-        font-family: 'Georgia', serif;
-    }
-
-    .bill-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 40px;
-    }
-
-    .bill-title {
-        font-size: 24px;
-        letter-spacing: 2px;
-        color: var(--primary-red);
-        text-transform: uppercase;
-    }
-
-    .header-actions {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-    }
-
-    .btn-print {
-        background: transparent;
-        border: none;
-        color: var(--dark-red);
-        font-size: 14px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .btn-paid {
-        background: var(--primary-red);
-        color: white;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 4px;
-        font-size: 11px;
-        font-weight: bold;
-        letter-spacing: 1px;
-        cursor: pointer;
-    }
-
-    .info-cards {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 24px;
-        margin-bottom: 40px;
-    }
-
-    .card-block {
-        background: var(--accent-pale);
-        padding: 32px;
-        border-radius: 8px;
-        position: relative;
-    }
-
-    .card-label {
-        font-size: 10px;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        color: var(--text-grey);
-        margin-bottom: 16px;
-    }
-
-    .badge-unpaid {
-        position: absolute;
-        top: 32px;
-        right: 32px;
-        background: #f8d7da;
-        color: #721c24;
-        padding: 4px 12px;
-        border-radius: 12px;
-        font-size: 10px;
-        font-weight: bold;
-        text-transform: uppercase;
-    }
-
-    .invoice-num {
-        font-size: 36px;
-        color: var(--primary-red);
-        margin-bottom: 24px;
-    }
-
-    .meta-info {
-        display: flex;
-        gap: 40px;
-    }
-
-    .meta-group label {
-        display: block;
-        font-size: 10px;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        color: var(--text-grey);
-        margin-bottom: 4px;
-    }
-
-    .meta-group span {
-        font-size: 14px;
-        color: var(--dark-red);
-        font-family: 'Georgia', serif;
-    }
-
-    .guest-profile {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-        margin-bottom: 24px;
-    }
-
-    .guest-avatar {
-        width: 48px;
-        height: 48px;
-        border-radius: 50%;
-        background: #ddd;
-        overflow: hidden;
-    }
-
-    .guest-avatar img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    .guest-name {
-        font-size: 18px;
-        font-family: 'Georgia', serif;
-        color: var(--dark-red);
-    }
-
-    .guest-status {
-        font-size: 10px;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        color: #856404;
-    }
-
-    .guest-details {
-        display: grid;
-        grid-template-columns: 80px 1fr;
-        gap: 12px;
-        font-size: 13px;
-    }
-
-    .guest-details label {
-        color: var(--text-grey);
-        text-transform: uppercase;
-        font-size: 10px;
-        letter-spacing: 1px;
-    }
-
-    .section-title {
-        font-size: 20px;
-        color: var(--primary-red);
-        margin-bottom: 24px;
-    }
-
-    .order-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 40px;
-    }
-
-    .order-table th {
-        text-align: left;
-        padding: 16px 0;
-        font-size: 10px;
-        text-transform: uppercase;
-        letter-spacing: 2px;
-        color: var(--text-grey);
-        border-bottom: 1px solid var(--border-color);
-    }
-
-    .order-table td {
-        padding: 24px 0;
-        border-bottom: 1px solid var(--border-color);
-    }
-
-    .item-name {
-        font-size: 16px;
-        color: var(--primary-red);
-        font-family: 'Georgia', serif;
-        margin-bottom: 4px;
-    }
-
-    .item-desc {
-        font-size: 10px;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        color: var(--text-grey);
-    }
-
-    .item-val {
-        font-size: 14px;
-    }
-
-    .item-bold {
-        font-weight: bold;
-        font-size: 14px;
-    }
-
-    .bottom-section {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 40px;
-    }
-
-    .payment-card {
-        background: white;
-        padding: 24px;
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
-        gap: 16px;
-        margin-bottom: 16px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-    }
-
-    .card-icon {
-        width: 40px;
-        height: 24px;
-        background: var(--dark-red);
-        border-radius: 4px;
-    }
-
-    .payment-title {
-        font-size: 16px;
-        font-family: 'Georgia', serif;
-        color: var(--dark-red);
-    }
-
-    .payment-desc {
-        font-size: 11px;
-        color: var(--text-grey);
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-
-    .info-box {
-        background: #f9f5d4;
-        padding: 16px 20px;
-        border-radius: 8px;
-        font-size: 13px;
-        color: #856404;
-        display: flex;
-        gap: 12px;
-    }
-
-    .totals-box {
-        padding-top: 16px;
-    }
-
-    .total-row {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 16px;
-        font-size: 13px;
-        color: var(--text-grey);
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-
-    .total-val {
-        color: var(--dark-red);
-        font-size: 16px;
-        text-transform: none;
-    }
-
-    .final-row {
-        margin-top: 32px;
-        margin-bottom: 16px;
-        border-top: 1px solid var(--border-color);
-        padding-top: 24px;
-    }
-
-    .final-row .total-label {
-        font-size: 11px;
-    }
-
-    .final-row .total-val {
-        font-size: 42px;
-        font-family: 'Georgia', serif;
-        color: var(--primary-red);
-    }
-
-    .btn-receipt {
-        background: #111;
-        color: white;
-        width: 100%;
-        padding: 16px;
-        border: none;
-        border-radius: 4px;
-        font-size: 11px;
-        font-weight: bold;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        cursor: pointer;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .footer-note {
-        margin-top: 60px;
-        text-align: center;
-        padding: 40px 0;
-        border-top: 1px solid #e0e0e0;
-    }
-
-    .footer-note h4 {
-        font-size: 18px;
-        color: var(--dark-red);
-        font-style: italic;
-        margin-bottom: 16px;
-    }
-
-    .footer-note p {
-        font-size: 11px;
-        color: var(--text-grey);
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-
-    .footer-links {
-        display: flex;
-        justify-content: center;
-        gap: 24px;
-        margin-top: 16px;
-    }
-
-    .footer-links a {
-        font-size: 11px;
-        color: var(--text-grey);
-        text-decoration: none;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-
-</style>
-
-<div class="bill-header">
-    <h1 class="bill-title serif">BILL DETAILS</h1>
-    <div class="header-actions">
-        <button class="btn-print">🖨️ Print</button>
-        <button class="btn-paid">MARK AS PAID</button>
+<!-- Section: Page Header -->
+<div class="bb-page-header">
+    <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+        <div>
+            <h1 class="bb-page-title">Invoice Detail</h1>
+            <p class="bb-page-sub">Review consolidated order items and final fiscal settlement.</p>
+        </div>
+        <div style="display: flex; gap: 12px; align-items: center;">
+            <button class="bb-btn bb-btn--outline">
+                <i class="fa-solid fa-print"></i> Print Bill
+            </button>
+            <button class="bb-btn bb-btn--primary">
+                <i class="fa-solid fa-check-double"></i> Mark as Settled
+            </button>
+        </div>
     </div>
 </div>
 
-<div class="info-cards">
-    <div class="card-block">
-        <div class="card-label">BILL REFERENCE</div>
-        <div class="badge-unpaid">UNPAID</div>
-        <div class="invoice-num serif">#INV-2024-0892</div>
-        <div class="meta-info">
-            <div class="meta-group">
-                <label>ORDER ID</label>
-                <span>ORD-88219</span>
-            </div>
-            <div class="meta-group">
-                <label>DATE ISSUED</label>
-                <span>October 24, 2024</span>
-            </div>
-        </div>
-    </div>
-
-    <div class="card-block">
-        <div class="card-label">GUEST CREDENTIALS</div>
-        <div class="guest-profile">
-            <div class="guest-avatar">
-                <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80" alt="Guest">
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-bottom: 40px;">
+    <!-- Bill Reference Card -->
+    <div class="bb-card" style="position: relative;">
+        <span class="bb-badge bb-badge--pending" style="position: absolute; top: 24px; right: 24px;">Unpaid</span>
+        <h3 class="bb-card-title" style="font-size: 0.75rem; color: var(--bb-text-muted); margin-bottom: 8px;">Bill Reference</h3>
+        <div class="bb-mono" style="font-size: 2rem; font-weight: 700; color: var(--bb-accent); margin-bottom: 24px;">#INV-2024-0892</div>
+        
+        <div style="display: flex; gap: 40px;">
+            <div>
+                <div style="font-size: 0.65rem; color: var(--bb-text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Order Association</div>
+                <div class="bb-mono" style="font-size: 0.9rem; font-weight: 600;">ORD-88219</div>
             </div>
             <div>
-                <div class="guest-name">Julian Thorne</div>
-                <div class="guest-status">VIP MEMBER • GOLD STATUS</div>
+                <div style="font-size: 0.65rem; color: var(--bb-text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Emission Date</div>
+                <div style="font-size: 0.9rem; font-weight: 600;">October 24, 2024</div>
             </div>
         </div>
-        <div class="guest-details">
-            <label>EMAIL</label>
-            <div>j.thorne@concierge.com</div>
-            <label>TABLE</label>
-            <div>Table 14 (Window Side)</div>
+    </div>
+
+    <!-- Guest Profile Card -->
+    <div class="bb-card">
+        <h3 class="bb-card-title" style="font-size: 0.75rem; color: var(--bb-text-muted); margin-bottom: 16px;">Guest Intelligence</h3>
+        <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 24px;">
+            <div style="width: 56px; height: 56px; border-radius: 50%; border: 2px solid var(--bb-accent); overflow: hidden; padding: 2px;">
+                <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&h=150&q=80" 
+                     style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;" alt="Guest">
+            </div>
+            <div>
+                <div style="font-family: var(--bb-font-display); font-size: 1.25rem; font-weight: 600;">Julian Thorne</div>
+                <div style="font-size: 0.7rem; color: var(--bb-accent); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700;">VIP Member • Gold Status</div>
+            </div>
+        </div>
+        <div style="display: grid; grid-template-columns: 80px 1fr; gap: 12px; font-size: 0.85rem;">
+            <label style="font-size: 0.65rem; color: var(--bb-text-muted); text-transform: uppercase; align-self: center;">Contact</label>
+            <div style="font-weight: 500;">j.thorne@concierge.com</div>
+            <label style="font-size: 0.65rem; color: var(--bb-text-muted); text-transform: uppercase; align-self: center;">Placement</label>
+            <div style="font-weight: 500;">Table 14 (Window Vista)</div>
         </div>
     </div>
 </div>
 
-<h2 class="section-title serif">Consolidated Order Items</h2>
+<h2 style="font-family: var(--bb-font-display); font-size: 1.5rem; margin-bottom: 24px; font-style: italic;">Consolidated Order Ledger</h2>
 
-<table class="order-table">
-    <thead>
-        <tr>
-            <th style="width: 50%;">ITEM DESCRIPTION</th>
-            <th>QTY</th>
-            <th>UNIT PRICE</th>
-            <th style="text-align: right;">SUBTOTAL</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-                <div class="item-name">Wagyu Beef Carpaccio</div>
-                <div class="item-desc">APPETIZER • TRUFFLE VINAIGRETTE</div>
-            </td>
-            <td class="item-val">01</td>
-            <td class="item-val">$34.00</td>
-            <td class="item-bold" style="text-align: right;">$34.00</td>
-        </tr>
-        <tr>
-            <td>
-                <div class="item-name">Pan-Seared Scallops</div>
-                <div class="item-desc">MAIN COURSE • CAULIFLOWER PURÉE</div>
-            </td>
-            <td class="item-val">02</td>
-            <td class="item-val">$48.00</td>
-            <td class="item-bold" style="text-align: right;">$96.00</td>
-        </tr>
-        <tr>
-            <td>
-                <div class="item-name">2018 Château Margaux</div>
-                <div class="item-desc">WINE • 750ML BOTTLE</div>
-            </td>
-            <td class="item-val">01</td>
-            <td class="item-val">$420.00</td>
-            <td class="item-bold" style="text-align: right;">$420.00</td>
-        </tr>
-        <tr>
-            <td>
-                <div class="item-name">Artisanal Bread Service</div>
-                <div class="item-desc">SIDES • CULTURED BUTTER</div>
-            </td>
-            <td class="item-val">01</td>
-            <td class="item-val">$12.00</td>
-            <td class="item-bold" style="text-align: right;">$12.00</td>
-        </tr>
-    </tbody>
-</table>
+<div class="bb-card">
+    <div class="bb-table-wrap">
+        <table class="bb-table">
+            <thead>
+                <tr>
+                    <th style="width: 50%;">Item Description</th>
+                    <th>Qty</th>
+                    <th>Unit Rate</th>
+                    <th style="text-align: right;">Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <div style="font-weight: 600; color: var(--bb-accent);">Wagyu Beef Carpaccio</div>
+                        <div style="font-size: 0.7rem; color: var(--bb-text-muted); text-transform: uppercase;">Appetizer • Truffle Vinaigrette</div>
+                    </td>
+                    <td class="bb-mono">01</td>
+                    <td class="bb-mono">Rs. 3,400</td>
+                    <td class="bb-mono" style="text-align: right; font-weight: 700;">Rs. 3,400</td>
+                </tr>
+                <tr>
+                    <td>
+                        <div style="font-weight: 600; color: var(--bb-accent);">Pan-Seared Scallops</div>
+                        <div style="font-size: 0.7rem; color: var(--bb-text-muted); text-transform: uppercase;">Main Course • Cauliflower Purée</div>
+                    </td>
+                    <td class="bb-mono">02</td>
+                    <td class="bb-mono">Rs. 4,800</td>
+                    <td class="bb-mono" style="text-align: right; font-weight: 700;">Rs. 9,600</td>
+                </tr>
+                <tr>
+                    <td>
+                        <div style="font-weight: 600; color: var(--bb-accent);">2018 Château Margaux</div>
+                        <div style="font-size: 0.7rem; color: var(--bb-text-muted); text-transform: uppercase;">Wine • 750ml Library Selection</div>
+                    </td>
+                    <td class="bb-mono">01</td>
+                    <td class="bb-mono">Rs. 42,000</td>
+                    <td class="bb-mono" style="text-align: right; font-weight: 700;">Rs. 42,000</td>
+                </tr>
+                <tr>
+                    <td>
+                        <div style="font-weight: 600; color: var(--bb-accent);">Artisanal Bread Service</div>
+                        <div style="font-size: 0.7rem; color: var(--bb-text-muted); text-transform: uppercase;">Sides • Cultured Butter Selection</div>
+                    </td>
+                    <td class="bb-mono">01</td>
+                    <td class="bb-mono">Rs. 1,200</td>
+                    <td class="bb-mono" style="text-align: right; font-weight: 700;">Rs. 1,200</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 
-<div class="bottom-section">
+<div style="display: grid; grid-template-columns: 1fr 400px; gap: 40px; margin-top: 40px;">
     <div>
-        <div class="card-label">PAYMENT PREFERENCE</div>
-        <div class="payment-card">
-            <div class="card-icon"></div>
+        <h3 class="bb-card-title" style="font-size: 0.75rem; color: var(--bb-text-muted); margin-bottom: 16px;">Payment Strategy</h3>
+        <div class="bb-card" style="display: flex; align-items: center; gap: 16px; padding: 20px; background: var(--bb-surface-2);">
+            <div style="width: 44px; height: 28px; background: #2d2d2d; border-radius: 4px; display: flex; align-items: center; justify-content: center; border: 1px solid #444;">
+                <i class="fa-brands fa-cc-mastercard" style="color: #eb001b; font-size: 1.2rem;"></i>
+            </div>
             <div>
-                <div class="payment-title">Mastercard Terminal 04</div>
-                <div class="payment-desc">ENDING IN • • • • 9201</div>
+                <div style="font-weight: 600; font-size: 0.95rem;">Mastercard Terminal 04</div>
+                <div style="font-size: 0.7rem; color: var(--bb-text-muted); text-transform: uppercase; letter-spacing: 0.1em;">Authorized • Ending in 9201</div>
             </div>
         </div>
-        <div class="info-box">
-            <i>ℹ️</i>
-            <div>The corporate discount has been automatically applied based on the guest's loyalty tier.</div>
+        <div style="background: var(--bb-accent-soft); padding: 16px 20px; border-radius: var(--bb-radius); border: 1px solid var(--bb-accent); margin-top: 24px; display: flex; gap: 16px; align-items: flex-start;">
+            <i class="fa-solid fa-circle-info" style="color: var(--bb-accent); margin-top: 2px;"></i>
+            <p style="font-size: 0.85rem; color: var(--bb-text); line-height: 1.5; opacity: 0.9;">
+                The corporate loyalty discount has been automatically applied based on the guest's Gold Tier status.
+            </p>
         </div>
     </div>
 
-    <div class="totals-box">
-        <div class="total-row">
-            <span>SUBTOTAL</span>
-            <span class="total-val">$562.00</span>
+    <div class="bb-card" style="padding: 32px;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 16px; font-size: 0.85rem; color: var(--bb-text-muted); text-transform: uppercase; letter-spacing: 0.05em;">
+            <span>Subtotal</span>
+            <span class="bb-mono" style="color: var(--bb-text); font-weight: 600;">Rs. 56,200</span>
         </div>
-        <div class="total-row">
-            <span>SERVICE CHARGE (15%)</span>
-            <span class="total-val">$84.30</span>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 16px; font-size: 0.85rem; color: var(--bb-text-muted); text-transform: uppercase; letter-spacing: 0.05em;">
+            <span>Service Charge (10%)</span>
+            <span class="bb-mono" style="color: var(--bb-text); font-weight: 600;">Rs. 5,620</span>
         </div>
-        <div class="total-row">
-            <span>LOYALTY DISCOUNT</span>
-            <span class="total-val" style="color: #b30000;">-$56.20</span>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 16px; font-size: 0.85rem; color: var(--bb-text-muted); text-transform: uppercase; letter-spacing: 0.05em;">
+            <span>Loyalty Discount</span>
+            <span class="bb-mono" style="color: var(--bb-danger); font-weight: 600;">-Rs. 2,810</span>
         </div>
-        <div class="total-row final-row">
-            <span class="total-label">FINAL AMOUNT DUE</span>
-            <span class="total-val">$590.10</span>
+        
+        <div style="margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--bb-border);">
+            <div style="font-size: 0.7rem; color: var(--bb-text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px;">Final Amount Due</div>
+            <div class="bb-mono" style="font-size: 2.75rem; font-weight: 700; color: var(--bb-accent);">Rs. 59,010</div>
         </div>
-        <button class="btn-receipt">🖨️ FULL RECEIPT</button>
+        
+        <button class="bb-btn bb-btn--primary" style="width: 100%; padding: 16px; margin-top: 32px;">
+            <i class="fa-solid fa-receipt"></i> Generate Full Receipt
+        </button>
     </div>
 </div>
 
-<div class="footer-note">
-    <h4>The Culinary Editorial</h4>
-    <p>© 2024 THE CULINARY EDITORIAL. ESTABLISHED IN EXCELLENCE.</p>
-    <div class="footer-links">
-        <a href="#">PRIVACY POLICY</a>
-        <a href="#">TERMS OF SERVICE</a>
-        <a href="#">CONTACT US</a>
-    </div>
+<div style="text-align: center; margin-top: 80px; padding-top: 40px; border-top: 1px solid var(--bb-border); opacity: 0.5;">
+    <h4 style="font-family: var(--bb-font-display); font-size: 1.25rem; font-style: italic; color: var(--bb-text); margin-bottom: 12px;">The Culinary Ledger</h4>
+    <p style="font-size: 0.65rem; color: var(--bb-text-muted); text-transform: uppercase; letter-spacing: 0.15em;">© 2024 BYTEBISTRO FINANCIAL SERVICES. ESTABLISHED IN EXCELLENCE.</p>
 </div>
 
 <jsp:include page="../../components/admin-footer.jsp" />
+

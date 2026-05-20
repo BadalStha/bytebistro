@@ -29,7 +29,7 @@ public class LoginServlet extends HttpServlet {
             } else if (role.equals("member")) {
                 res.sendRedirect(req.getContextPath() + "/pages/member/dashboard.jsp");
             } else {
-                res.sendRedirect(req.getContextPath() + "/pages/visitor/booking-form.jsp");
+                res.sendRedirect(req.getContextPath() + "/pages/visitor/member-visitor-booking-form.jsp");
             }
             return;
         }
@@ -78,7 +78,7 @@ public class LoginServlet extends HttpServlet {
                 } else if (user.getRole().equals("member")) {
                     res.sendRedirect(req.getContextPath() + "/pages/member/dashboard.jsp");
                 } else {
-                    res.sendRedirect(req.getContextPath() + "/pages/visitor/booking-form.jsp");
+                    res.sendRedirect(req.getContextPath() + "/pages/visitor/member-visitor-booking-form.jsp");
                 }
 
             } else {
